@@ -14,14 +14,27 @@ namespace SpaceStationScramble {
     /// This is the main type for your game
     /// </summary>
     public class SpaceStationScrambleGame : Microsoft.Xna.Framework.Game {
+        const int SCREEN_WIDTH = 1280;
+        const int SCREEN_HEIGHT = 720;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Synchronizer synchronizer;
+
+        PlayerNumber currentPlayer;
+
+        //Textures
+        Texture2D playerOneBackground;
+        Texture2D playerTwoBackground;
 
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             synchronizer = new Synchronizer();
+
+            graphics.PreferredBackBufferWidth = SCREEN_WIDTH;
+            graphics.PreferredBackBufferHeight = SCREEN_HEIGHT;
+            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -32,6 +45,9 @@ namespace SpaceStationScramble {
         /// </summary>
         protected override void Initialize() {
             // TODO: Add your initialization logic here
+
+            //Start with player one for now
+            currentPlayer = PlayerNumber.ONE;
 
             base.Initialize();
         }
@@ -44,7 +60,8 @@ namespace SpaceStationScramble {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            playerOneBackground = Content.Load<Texture2D>("gfx/inside-rough");
+            playerTwoBackground = Content.Load<Texture2D>("gfx/outside-rough");
         }
 
         /// <summary>
@@ -78,8 +95,23 @@ namespace SpaceStationScramble {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            //Draw the background
+            if (currentPlayer == PlayerNumber.ONE) {
+                spriteBatch.Draw(playerOneBackground, Vector2.Zero, Color.White);
+            }
+            else {
+                spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White)
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
     }
+
+    public enum PlayerNumber {
+        ONE,
+        TWO
+    };
 }
