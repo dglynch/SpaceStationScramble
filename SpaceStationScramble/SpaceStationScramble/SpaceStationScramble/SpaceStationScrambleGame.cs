@@ -31,13 +31,19 @@ namespace SpaceStationScramble {
 
         //Textures
         Texture2D characterSelectionBackground;
+        Texture2D menuSelector;
         Texture2D playerOneBackground;
         Texture2D playerTwoBackground;
+
+        Vector2 playerOneMenuPosition = new Vector2(450, 280);
+        Vector2 playerTwoMenuPosition = new Vector2(450, 380);
 
         //Station info
         Dictionary<SpaceStationSection, Vector2> insideNodePositions;
 
-        ScreenContext context = ScreenContext.GAME_PLAY;
+        ScreenContext context = ScreenContext.CHARACTER_SELECTION;
+
+        double menuLagTime = 0;
 
         //Player One info
         Texture2D playerOneSprite; //For animation this will need to updated
@@ -109,6 +115,7 @@ namespace SpaceStationScramble {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             characterSelectionBackground = Content.Load<Texture2D>("gfx/character-selection");
+            menuSelector = Content.Load<Texture2D>("gfx/player");
 
             playerOneBackground = Content.Load<Texture2D>("gfx/inside-rough");
             playerTwoBackground = Content.Load<Texture2D>("gfx/outside-rough");
@@ -138,6 +145,22 @@ namespace SpaceStationScramble {
 
             switch (context) {
                 case ScreenContext.CHARACTER_SELECTION:
+                    if (gameTime.TotalGameTime.TotalMilliseconds > menuLagTime) {
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
+                            if (currentPlayer == PlayerNumber.TWO) {
+                                currentPlayer = PlayerNumber.ONE;
+                                menuLagTime = gameTime.TotalGameTime.TotalMilliseconds + 10;
+                            }
+                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadDown) || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S)) {
+                            if (currentPlayer == PlayerNumber.ONE) {
+                                currentPlayer = PlayerNumber.TWO;
+                                menuLagTime = gameTime.TotalGameTime.TotalMilliseconds + 10;
+                            }
+                        }
+                        if (currentGamepadState.IsButtonDown(Buttons.Start) || currentKeyboardState.IsKeyDown(Keys.Enter) || currentKeyboardState.IsKeyDown(Keys.Space)) {
+                            context = ScreenContext.GAME_PLAY;
+                        }
+                    }
                     break;
                 case ScreenContext.GAME_PLAY:
                     // Allows the game to exit
@@ -197,6 +220,11 @@ namespace SpaceStationScramble {
             switch (context) {
                 case ScreenContext.CHARACTER_SELECTION:
                     spriteBatch.Draw(characterSelectionBackground, Vector2.Zero, Color.White);
+                    if (currentPlayer == PlayerNumber.ONE) {
+                        spriteBatch.Draw(menuSelector, playerOneMenuPosition, Color.White);
+                    } else {
+                        spriteBatch.Draw(menuSelector, playerTwoMenuPosition, Color.White);
+                    }
                     break;
                 case ScreenContext.GAME_PLAY:
                     //Draw the background
