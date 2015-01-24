@@ -46,6 +46,11 @@ namespace SpaceStationScramble {
         SpaceStationSection playerOneDestSection;
         PlayerOneState playerOneState;
 
+        //Player Two info
+        Texture2D playerTwoSprite; //For animation this will need to updated
+        Vector2 playerTwoPosition;
+        float playerTwoMoveSpeed;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -85,6 +90,10 @@ namespace SpaceStationScramble {
             playerOneDestSection = SpaceStationSection.CENTER;
             playerOneState = PlayerOneState.IDLE;
 
+            //initialize player two properties
+            playerTwoMoveSpeed = 3.0f;
+            playerTwoPosition = new Vector2(960, 540);
+
             base.Initialize();
         }
 
@@ -100,6 +109,7 @@ namespace SpaceStationScramble {
             playerTwoBackground = Content.Load<Texture2D>("gfx/outside-rough");
 
             playerOneSprite = Content.Load<Texture2D>("gfx/player");
+            playerTwoSprite = Content.Load<Texture2D>("gfx/player");
         }
 
         /// <summary>
@@ -134,6 +144,19 @@ namespace SpaceStationScramble {
                 if (currentGamepadState.IsButtonDown(Buttons.DPadUp)
                     || currentKeyboardState.IsKeyDown(Keys.Up)) {
                 }
+            } else {
+                if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
+                    playerTwoPosition.Y -= playerTwoMoveSpeed;
+                }
+                if (currentGamepadState.IsButtonDown(Buttons.DPadDown) || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S)) {
+                    playerTwoPosition.Y += playerTwoMoveSpeed;
+                }
+                if (currentGamepadState.IsButtonDown(Buttons.DPadRight) || currentKeyboardState.IsKeyDown(Keys.Right) || currentKeyboardState.IsKeyDown(Keys.D)) {
+                    playerTwoPosition.X += playerTwoMoveSpeed;
+                }
+                if (currentGamepadState.IsButtonDown(Buttons.DPadLeft) || currentKeyboardState.IsKeyDown(Keys.Left) || currentKeyboardState.IsKeyDown(Keys.A)) {
+                    playerTwoPosition.X -= playerTwoMoveSpeed;
+                }
             }
 
             base.Update(gameTime);
@@ -162,6 +185,9 @@ namespace SpaceStationScramble {
                 spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
             } else {
                 spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
+
+                //Draw the player
+                spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
             }
 
             spriteBatch.End();
