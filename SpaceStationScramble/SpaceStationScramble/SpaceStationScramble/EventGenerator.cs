@@ -11,12 +11,16 @@ namespace SpaceStationScramble {
         private Dictionary<EventSlot, long> eventSlots;
         private int minEventInterval;
         private int maxEventInterval;
+        private int minDuration;
+        private int maxDuration;
 
         public EventGenerator(Synchronizer syncronizer) {
             this.syncronizer = syncronizer;
             //Eventually these times will change as time goes on
             minEventInterval = 2000;
             maxEventInterval = 7000;
+            minDuration = 5000;
+            maxDuration = 7000;
 
             eventSlots = new Dictionary<EventSlot, long>();
             foreach(EventSlot slot in Enum.GetValues(typeof (EventSlot))) {
@@ -30,11 +34,11 @@ namespace SpaceStationScramble {
             EventSlot nextSlot = (EventSlot)(slots.GetValue(syncronizer.Next(0, slots.Length)));
 
             long nextEventTime = eventSlots[nextSlot] + syncronizer.Next(minEventInterval, maxEventInterval);
-            eventSlots[nextSlot] = nextEventTime;
+            long eventDuration = syncronizer.Next(minDuration, maxDuration); //TODO random durations?
+            eventSlots[nextSlot] = nextEventTime + eventDuration;
 
-            long eventDuration = 3000; //TODO random durations?
-
-            return new DisasterEvent(nextSlot, nextEventTime, nextEventTime + eventDuration);
+            //Currently only creating gas leaks
+            return new GasLeakDisaster(nextSlot, nextEventTime, nextEventTime + eventDuration);
         }
     }
 }
