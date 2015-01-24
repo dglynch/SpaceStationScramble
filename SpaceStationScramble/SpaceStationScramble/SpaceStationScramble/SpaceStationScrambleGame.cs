@@ -552,7 +552,9 @@ namespace SpaceStationScramble {
                     spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds), new Vector2(10, 10), Color.White);
                     for (int i = 0; i < disasterEvents.Count(); i++) {
                         if (Cheater.CheatsOn) {
-                            spriteBatch.DrawString(font, "Event time left: " + disasterEvents[i].EndTime.ToString(), new Vector2(20, 20 + (i * 10)), Color.Red, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+                            spriteBatch.DrawString(font, "Event [" + i + "] time left: "
+                                + (int)((disasterEvents[i].EndTime - elapsedRoundTime) / 1000),
+                                new Vector2(20, 50 + (i * 14)), Color.Red, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
                         }
                     }
                     break;
