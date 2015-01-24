@@ -16,10 +16,12 @@ namespace SpaceStationScramble {
     public class SpaceStationScrambleGame : Microsoft.Xna.Framework.Game {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Synchronizer synchronizer;
 
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            synchronizer = new Synchronizer();
         }
 
         /// <summary>
