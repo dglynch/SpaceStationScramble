@@ -166,11 +166,17 @@ namespace SpaceStationScramble {
                         }
                         context = ScreenContext.KEY_CODE;
                     }
+                    if (isNewlyPressedBack()) {
+                        this.Exit();
+                    }
                     break;
                 case ScreenContext.KEY_CODE:
                     if (currentPlayer == PlayerNumber.ONE) {
                         if (isNewlyPressedStart()) {
                             context = ScreenContext.READY_TO_START;
+                        }
+                        if (isNewlyPressedBack()) {
+                            context = ScreenContext.CHARACTER_SELECTION;
                         }
                     } else {
                         keyCode += getTypedCharacter();
@@ -185,6 +191,8 @@ namespace SpaceStationScramble {
                         if (isNewlyPressedBack()) {
                             if (keyCode.Length > 0) {
                                 keyCode = keyCode.Remove(keyCode.Length - 1);
+                            } else {
+                                context = ScreenContext.CHARACTER_SELECTION;
                             }
                         }
                     }
@@ -192,6 +200,9 @@ namespace SpaceStationScramble {
                 case ScreenContext.READY_TO_START:
                     if (isNewlyPressedStart()) {
                         context = ScreenContext.GAME_PLAY;
+                    }
+                    if (isNewlyPressedBack()) {
+                        context = ScreenContext.CHARACTER_SELECTION;
                     }
                     break;
                 case ScreenContext.GAME_PLAY:
@@ -466,7 +477,7 @@ namespace SpaceStationScramble {
         private bool isNewlyPressedBack() {
             return (currentGamepadState.IsButtonDown(Buttons.Back) && !previousGamepadState.IsButtonDown(Buttons.Back))
                 || (currentKeyboardState.IsKeyDown(Keys.Back) && !previousKeyboardState.IsKeyDown(Keys.Back))
-                || (currentKeyboardState.IsKeyDown(Keys.Delete) && !previousKeyboardState.IsKeyDown(Keys.Delete));
+                || (currentKeyboardState.IsKeyDown(Keys.Escape) && !previousKeyboardState.IsKeyDown(Keys.Escape));
         }
 
     }
