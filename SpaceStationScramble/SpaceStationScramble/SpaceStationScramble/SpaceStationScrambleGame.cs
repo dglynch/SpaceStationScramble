@@ -143,7 +143,20 @@ namespace SpaceStationScramble {
                 //Gather input
                 if (currentGamepadState.IsButtonDown(Buttons.DPadUp)
                     || currentKeyboardState.IsKeyDown(Keys.Up)) {
+                        if (playerOneCurrentSection == SpaceStationSection.CENTER ||
+                            playerOneCurrentSection == SpaceStationSection.SOUTH) {
+                            playerOneMoveStep = new Vector2(0.0f, -playerOneMoveSpeed);
+                        }
+                } else if (currentGamepadState.IsButtonDown(Buttons.DPadDown)
+                    || currentKeyboardState.IsKeyDown(Keys.Down)) {
+                } else if (currentGamepadState.IsButtonDown(Buttons.DPadLeft)
+                    || currentKeyboardState.IsKeyDown(Keys.Left)) {
+                } else if (currentGamepadState.IsButtonDown(Buttons.DPadRight)
+                    || currentKeyboardState.IsKeyDown(Keys.Right)) {
                 }
+
+                //Update player1 position
+                playerOnePosition += playerOneMoveStep;
             } else {
                 if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
                     playerTwoPosition.Y -= playerTwoMoveSpeed;
@@ -211,6 +224,9 @@ namespace SpaceStationScramble {
 
     public enum PlayerOneState {
         IDLE,
-        MOVING
+        MOVING_UP,
+        MOVING_DOWN,
+        MOVING_LEFT,
+        MOVING_RIGHT
     };
 }
