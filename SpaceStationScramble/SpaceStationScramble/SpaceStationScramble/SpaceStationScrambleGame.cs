@@ -229,4 +229,9 @@ namespace SpaceStationScramble {
         MOVING_LEFT,
         MOVING_RIGHT
     };
+
+    public enum ScreenContext {
+        CHARACTER_SELECTION,
+        GAME_PLAY
+    }
 }
