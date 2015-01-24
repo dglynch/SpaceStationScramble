@@ -5,6 +5,6 @@ using System.Text;
 
 namespace SpaceStationScramble {
     class Cheater {
-        public const bool CheatsOn = true;
+        public const bool CheatsOn = false;
     }
 }
