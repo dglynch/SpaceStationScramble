@@ -26,15 +26,19 @@ namespace SpaceStationScramble {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Synchronizer synchronizer;
+        string keyCode;
 
         PlayerNumber currentPlayer;
 
         //Textures
         Texture2D characterSelectionBackground;
         Texture2D menuSelector;
+        Texture2D keyCodeBackground;
         Texture2D readyStartBackground;
         Texture2D playerOneBackground;
         Texture2D playerTwoBackground;
+
+        SpriteFont font;
 
         Vector2 playerOneMenuPosition = new Vector2(450, 280);
         Vector2 playerTwoMenuPosition = new Vector2(450, 380);
@@ -112,6 +116,7 @@ namespace SpaceStationScramble {
             characterSelectionBackground = Content.Load<Texture2D>("gfx/character-selection");
             menuSelector = Content.Load<Texture2D>("gfx/player");
 
+            keyCodeBackground = Content.Load<Texture2D>("gfx/key-code-background");
             readyStartBackground = Content.Load<Texture2D>("gfx/ready-start");
 
             playerOneBackground = Content.Load<Texture2D>("gfx/inside-rough");
@@ -119,6 +124,8 @@ namespace SpaceStationScramble {
 
             playerOneSprite = Content.Load<Texture2D>("gfx/player");
             playerTwoSprite = Content.Load<Texture2D>("gfx/player");
+
+            font = Content.Load<SpriteFont>("font/Segoe UI Mono");
         }
 
         /// <summary>
@@ -151,6 +158,14 @@ namespace SpaceStationScramble {
                             currentPlayer = PlayerNumber.TWO;
                         }
                     }
+                    if (isNewlyPressedStart()) {
+                        if (currentPlayer == PlayerNumber.ONE) {
+                            keyCode = synchronizer.GenerateKeyCode();
+                        }
+                        context = ScreenContext.KEY_CODE;
+                    }
+                    break;
+                case ScreenContext.KEY_CODE:
                     if (isNewlyPressedStart()) {
                         context = ScreenContext.READY_TO_START;
                     }
@@ -347,6 +362,14 @@ namespace SpaceStationScramble {
                         spriteBatch.Draw(menuSelector, playerTwoMenuPosition, Color.White);
                     }
                     break;
+                case ScreenContext.KEY_CODE:
+                    spriteBatch.Draw(keyCodeBackground, Vector2.Zero, Color.White);
+                    if (currentPlayer == PlayerNumber.ONE) {
+                        spriteBatch.DrawString(font, keyCode, new Vector2(640 - font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
+                    } else {
+
+                    }
+                    break;
                 case ScreenContext.READY_TO_START:
                     spriteBatch.Draw(readyStartBackground, Vector2.Zero, Color.White);
                     break;
@@ -437,6 +460,7 @@ namespace SpaceStationScramble {
 
     public enum ScreenContext {
         CHARACTER_SELECTION,
+        KEY_CODE,
         READY_TO_START,
         GAME_PLAY
     }
