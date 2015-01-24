@@ -67,6 +67,12 @@ namespace SpaceStationScramble {
         Vector2 playerTwoPosition;
         float playerTwoMoveSpeed;
 
+        //Disaster event info
+        EventGenerator eventGenerator;
+        DisasterEvent nextEvent;
+        List<DisasterEvent> disasterEvents;
+        double elapsedRoundTime;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -244,6 +250,10 @@ namespace SpaceStationScramble {
                     break;
                 case ScreenContext.READY_TO_START:
                     if (isNewlyPressedStart()) {
+                        disasterEvents = new List<DisasterEvent>();
+                        eventGenerator = new EventGenerator(synchronizer);
+                        elapsedRoundTime = 0;
+                        nextEvent = eventGenerator.NextEvent();
                         context = ScreenContext.GAME_PLAY;
                     }
                     if (isNewlyPressedBack()) {
@@ -256,6 +266,27 @@ namespace SpaceStationScramble {
                             || currentKeyboardState.IsKeyDown(Keys.Escape)) {
                         context = ScreenContext.TITLE_SCREEN_MENU;
                     }
+
+                    elapsedRoundTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+
+                    if (nextEvent.StartTime <= elapsedRoundTime) {
+                        disasterEvents.Add(nextEvent);
+                        nextEvent = eventGenerator.NextEvent();
+                    }
+
+                    List<DisasterEvent> eventsToRemove = new List<DisasterEvent>();
+                    foreach (DisasterEvent theEvent in disasterEvents) {
+                        if (theEvent.EndTime <= elapsedRoundTime) {
+                            eventsToRemove.Add(theEvent);
+                        } else {
+                            theEvent.Update();
+                        }
+                    }
+
+                    foreach (DisasterEvent theEvent in eventsToRemove) {
+                        disasterEvents.Remove(theEvent);
+                    }
+                    eventsToRemove.Clear();
 
                     //Update player one
                     if (currentPlayer == PlayerNumber.ONE) {
@@ -497,6 +528,7 @@ namespace SpaceStationScramble {
                     spriteBatch.Draw(readyStartBackground, Vector2.Zero, Color.White);
                     break;
                 case ScreenContext.GAME_PLAY:
+
                     //Draw the background
                     if (currentPlayer == PlayerNumber.ONE) {
                         spriteBatch.Draw(playerOneBackground, Vector2.Zero, Color.White);
@@ -517,6 +549,11 @@ namespace SpaceStationScramble {
                         spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
                     }
                     spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", gameTime.TotalGameTime.Minutes, gameTime.TotalGameTime.Seconds), new Vector2(10, 10), Color.White);
+                    for (int i = 0; i < disasterEvents.Count(); i++) {
+                        if (Cheater.CheatsOn) {
+                            spriteBatch.DrawString(font, "Event time left: " + disasterEvents[i].EndTime.ToString(), new Vector2(20, 20 + (i * 10)), Color.Red, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+                        }
+                    }
                     break;
             }
 
