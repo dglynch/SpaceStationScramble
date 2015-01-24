@@ -387,6 +387,25 @@ namespace SpaceStationScramble {
 
             base.Draw(gameTime);
         }
+
+        private bool isNewlyPressedUp() {
+            return (currentGamepadState.IsButtonDown(Buttons.DPadUp) && !previousGamepadState.IsButtonDown(Buttons.DPadUp))
+                || (currentKeyboardState.IsKeyDown(Keys.Up) && !currentKeyboardState.IsKeyDown(Keys.Up))
+                || (currentKeyboardState.IsKeyDown(Keys.W) && !currentKeyboardState.IsKeyDown(Keys.W));
+        }
+
+        private bool isNewlyPressedDown() {
+            return (currentGamepadState.IsButtonDown(Buttons.DPadDown) && !previousGamepadState.IsButtonDown(Buttons.DPadDown))
+                || (currentKeyboardState.IsKeyDown(Keys.Down) && !currentKeyboardState.IsKeyDown(Keys.Down))
+                || (currentKeyboardState.IsKeyDown(Keys.S) && !currentKeyboardState.IsKeyDown(Keys.S));
+        }
+
+        private bool isNewlyPressedStart() {
+            return (currentGamepadState.IsButtonDown(Buttons.Start) && !previousGamepadState.IsButtonDown(Buttons.Start))
+                || (currentKeyboardState.IsKeyDown(Keys.Enter) && !currentKeyboardState.IsKeyDown(Keys.Enter))
+                || (currentKeyboardState.IsKeyDown(Keys.Space) && !currentKeyboardState.IsKeyDown(Keys.Space));
+        }
+    
     }
 
     public enum PlayerNumber {
