@@ -160,8 +160,7 @@ namespace SpaceStationScramble {
 
                 //Draw the player
                 spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
-            }
-            else {
+            } else {
                 spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
             }
 
