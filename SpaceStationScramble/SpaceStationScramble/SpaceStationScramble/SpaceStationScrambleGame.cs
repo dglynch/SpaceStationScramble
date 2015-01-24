@@ -17,6 +17,12 @@ namespace SpaceStationScramble {
         const int SCREEN_WIDTH = 1280;
         const int SCREEN_HEIGHT = 720;
 
+        //Input
+        private KeyboardState currentKeyboardState;
+        private KeyboardState previousKeyboardState;
+        private GamePadState currentGamepadState;
+        private GamePadState previousGamepadState;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Synchronizer synchronizer;
@@ -26,6 +32,19 @@ namespace SpaceStationScramble {
         //Textures
         Texture2D playerOneBackground;
         Texture2D playerTwoBackground;
+
+        //Station info
+        Dictionary<SpaceStationSection, Vector2> insideNodePositions;
+
+        //Player One info
+        Texture2D playerOneSprite; //For animation this will need to updated
+        Vector2 playerOnePosition;
+        Vector2 playerOneOffset;
+        float playerOneMoveSpeed;
+        Vector2 playerOneMoveStep;
+        SpaceStationSection playerOneCurrentSection;
+        SpaceStationSection playerOneDestSection;
+        PlayerOneState playerOneState;
 
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
@@ -49,6 +68,23 @@ namespace SpaceStationScramble {
             //Start with player one for now
             currentPlayer = PlayerNumber.ONE;
 
+            //Setup space station information
+            insideNodePositions = new Dictionary<SpaceStationSection, Vector2>();
+            insideNodePositions.Add(SpaceStationSection.CENTER, new Vector2(640, 360));
+            insideNodePositions.Add(SpaceStationSection.NORTH, new Vector2(640, 60));
+            insideNodePositions.Add(SpaceStationSection.SOUTH, new Vector2(640, 660));
+            insideNodePositions.Add(SpaceStationSection.EAST, new Vector2(980, 360));
+            insideNodePositions.Add(SpaceStationSection.WEST, new Vector2(300, 360));
+
+            //initialize player one properties
+            playerOneMoveSpeed = 3.0f;
+            playerOneMoveStep = Vector2.Zero;
+
+            playerOnePosition = insideNodePositions[SpaceStationSection.CENTER];
+            playerOneCurrentSection = SpaceStationSection.CENTER;
+            playerOneDestSection = SpaceStationSection.CENTER;
+            playerOneState = PlayerOneState.IDLE;
+
             base.Initialize();
         }
 
@@ -62,6 +98,8 @@ namespace SpaceStationScramble {
 
             playerOneBackground = Content.Load<Texture2D>("gfx/inside-rough");
             playerTwoBackground = Content.Load<Texture2D>("gfx/outside-rough");
+
+            playerOneSprite = Content.Load<Texture2D>("gfx/player");
         }
 
         /// <summary>
@@ -78,11 +116,25 @@ namespace SpaceStationScramble {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime) {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            previousKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+            previousGamepadState = currentGamepadState;
+            currentGamepadState = GamePad.GetState(PlayerIndex.One);
 
-            // TODO: Add your update logic here
+
+            // Allows the game to exit
+            if (currentGamepadState.Buttons.Back == ButtonState.Pressed
+                || currentKeyboardState.IsKeyDown(Keys.Escape)) {
+                this.Exit();
+            }
+
+            //Update player one
+            if (currentPlayer == PlayerNumber.ONE) {
+                //Gather input
+                if (currentGamepadState.IsButtonDown(Buttons.DPadUp)
+                    || currentKeyboardState.IsKeyDown(Keys.Up)) {
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -94,11 +146,20 @@ namespace SpaceStationScramble {
         protected override void Draw(GameTime gameTime) {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             spriteBatch.Begin();
             //Draw the background
             if (currentPlayer == PlayerNumber.ONE) {
                 spriteBatch.Draw(playerOneBackground, Vector2.Zero, Color.White);
+
+                //For debugging node positions
+                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.NORTH], Color.Green);
+                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.SOUTH], Color.Green);
+                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.EAST], Color.Green);
+                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.WEST], Color.Green);
+                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.CENTER], Color.Green);
+
+                //Draw the player
+                spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
             }
             else {
                 spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
@@ -113,5 +174,18 @@ namespace SpaceStationScramble {
     public enum PlayerNumber {
         ONE,
         TWO
+    };
+
+    public enum SpaceStationSection {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST,
+        CENTER
+    };
+
+    public enum PlayerOneState {
+        IDLE,
+        MOVING
     };
 }
