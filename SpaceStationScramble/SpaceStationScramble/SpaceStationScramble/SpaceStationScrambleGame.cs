@@ -51,8 +51,6 @@ namespace SpaceStationScramble {
         Vector2 playerOneOffset;
         float playerOneMoveSpeed;
         Vector2 playerOneMoveStep;
-        SpaceStationSection playerOneCurrentSection;
-        SpaceStationSection playerOneDestSection;
         PlayerOneState playerOneState;
 
         //Player Two info
@@ -95,9 +93,7 @@ namespace SpaceStationScramble {
             playerOneMoveStep = Vector2.Zero;
 
             playerOnePosition = insideNodePositions[SpaceStationSection.CENTER];
-            playerOneCurrentSection = SpaceStationSection.CENTER;
-            playerOneDestSection = SpaceStationSection.CENTER;
-            playerOneState = PlayerOneState.IDLE;
+            playerOneState = PlayerOneState.AtCenter;
 
             //initialize player two properties
             playerTwoMoveSpeed = 3.0f;
@@ -171,20 +167,23 @@ namespace SpaceStationScramble {
 
                     //Update player one
                     if (currentPlayer == PlayerNumber.ONE) {
-                        //Gather input
-                        if (currentGamepadState.IsButtonDown(Buttons.DPadUp)
-                            || currentKeyboardState.IsKeyDown(Keys.Up)) {
-                            if (playerOneCurrentSection == SpaceStationSection.CENTER ||
-                                playerOneCurrentSection == SpaceStationSection.SOUTH) {
-                                playerOneMoveStep = new Vector2(0.0f, -playerOneMoveSpeed);
-                            }
-                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadDown)
-                            || currentKeyboardState.IsKeyDown(Keys.Down)) {
-                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadLeft)
-                            || currentKeyboardState.IsKeyDown(Keys.Left)) {
-                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadRight)
-                            || currentKeyboardState.IsKeyDown(Keys.Right)) {
+                        InputKey pressedKey = InputKey.None;
+
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
+                            pressedKey = InputKey.MoveUp;
                         }
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadDown) || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S)) {
+                            pressedKey = InputKey.MoveDown;
+                        }
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadRight) || currentKeyboardState.IsKeyDown(Keys.Right) || currentKeyboardState.IsKeyDown(Keys.D)) {
+                            pressedKey = InputKey.MoveRight;
+                        }
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadLeft) || currentKeyboardState.IsKeyDown(Keys.Left) || currentKeyboardState.IsKeyDown(Keys.A)) {
+                            pressedKey = InputKey.MoveLeft;
+                        }
+
+                        processPlayerOneInput(pressedKey);
+                        checkPlayerPosition();
 
                         //Update player1 position
                         playerOnePosition += playerOneMoveStep;
@@ -206,6 +205,126 @@ namespace SpaceStationScramble {
             }
 
             base.Update(gameTime);
+        }
+
+        private void processPlayerOneInput(InputKey key) {
+            switch (playerOneState) {
+                case PlayerOneState.AtCenter:
+                    switch (key) {
+                        case InputKey.MoveUp:
+                            playerOneState = PlayerOneState.CenterToNorth;
+                            playerOneMoveStep = new Vector2(0.0f, -playerOneMoveSpeed);
+                            break;
+                        case InputKey.MoveDown:
+                            playerOneState = PlayerOneState.CenterToSouth;
+                            playerOneMoveStep = new Vector2(0.0f, playerOneMoveSpeed);
+                            break;
+                        case InputKey.MoveLeft:
+                            playerOneState = PlayerOneState.CenterToWest;
+                            playerOneMoveStep = new Vector2(-playerOneMoveSpeed, 0.0f);
+                            break;
+                        case InputKey.MoveRight:
+                            playerOneState = PlayerOneState.CenterToEast;
+                            playerOneMoveStep = new Vector2(playerOneMoveSpeed, 0.0f);
+                            break;
+                    }
+                    break;
+                case PlayerOneState.CenterToNorth:
+                case PlayerOneState.AtNorth:
+                    if (key == InputKey.MoveDown) {
+                        playerOneState = PlayerOneState.NorthToCenter;
+                        playerOneMoveStep = new Vector2(0.0f, playerOneMoveSpeed);
+                    }
+                    break;
+                case PlayerOneState.CenterToSouth:
+                case PlayerOneState.AtSouth:
+                    if (key == InputKey.MoveUp) {
+                        playerOneState = PlayerOneState.SouthToCenter;
+                        playerOneMoveStep = new Vector2(0.0f, -playerOneMoveSpeed);
+                    }
+                    break;
+                case PlayerOneState.CenterToWest:
+                case PlayerOneState.AtWest:
+                    if (key == InputKey.MoveRight) {
+                        playerOneState = PlayerOneState.WestToCenter;
+                        playerOneMoveStep = new Vector2(playerOneMoveSpeed, 0.0f);
+                    }
+                    break;
+                case PlayerOneState.CenterToEast:
+                case PlayerOneState.AtEast:
+                    if (key == InputKey.MoveLeft) {
+                        playerOneState = PlayerOneState.EastToCenter;
+                        playerOneMoveStep = new Vector2(-playerOneMoveSpeed, 0.0f);
+                    }
+                    break;
+                case PlayerOneState.NorthToCenter:
+                    if (key == InputKey.MoveUp) {
+                        playerOneState = PlayerOneState.CenterToNorth;
+                        playerOneMoveStep = new Vector2(0.0f, -playerOneMoveSpeed);
+                    }
+                    break;
+                case PlayerOneState.SouthToCenter:
+                    if (key == InputKey.MoveDown) {
+                        playerOneState = PlayerOneState.CenterToSouth;
+                        playerOneMoveStep = new Vector2(0.0f, playerOneMoveSpeed);
+                    }
+                    break;
+                case PlayerOneState.EastToCenter:
+                    if (key == InputKey.MoveRight) {
+                        playerOneState = PlayerOneState.CenterToEast;
+                        playerOneMoveStep = new Vector2(playerOneMoveSpeed, 0.0f);
+                    }
+                    break;
+                case PlayerOneState.WestToCenter:
+                    if (key == InputKey.MoveLeft) {
+                        playerOneState = PlayerOneState.CenterToWest;
+                        playerOneMoveStep = new Vector2(-playerOneMoveSpeed, 0.0f);
+                    }
+                    break;
+            }
+        }
+
+        private void checkPlayerPosition() {
+            switch (playerOneState) {
+                case PlayerOneState.CenterToNorth:
+                    if (Vector2.Distance(playerOnePosition, insideNodePositions[SpaceStationSection.NORTH]) < playerOneMoveSpeed) {
+                        playerOnePosition = insideNodePositions[SpaceStationSection.NORTH];
+                        playerOneState = PlayerOneState.AtNorth;
+                        playerOneMoveStep = Vector2.Zero;
+                    }
+                    break;
+                case PlayerOneState.CenterToSouth:
+                    if (Vector2.Distance(playerOnePosition, insideNodePositions[SpaceStationSection.SOUTH]) < playerOneMoveSpeed) {
+                        playerOnePosition = insideNodePositions[SpaceStationSection.SOUTH];
+                        playerOneState = PlayerOneState.AtSouth;
+                        playerOneMoveStep = Vector2.Zero;
+                    }
+                    break;
+                case PlayerOneState.CenterToWest:
+                    if (Vector2.Distance(playerOnePosition, insideNodePositions[SpaceStationSection.WEST]) < playerOneMoveSpeed) {
+                        playerOnePosition = insideNodePositions[SpaceStationSection.WEST];
+                        playerOneState = PlayerOneState.AtWest;
+                        playerOneMoveStep = Vector2.Zero;
+                    }
+                    break;
+                case PlayerOneState.CenterToEast:
+                    if (Vector2.Distance(playerOnePosition, insideNodePositions[SpaceStationSection.EAST]) < playerOneMoveSpeed) {
+                        playerOnePosition = insideNodePositions[SpaceStationSection.EAST];
+                        playerOneState = PlayerOneState.AtEast;
+                        playerOneMoveStep = Vector2.Zero;
+                    }
+                    break;
+                case PlayerOneState.NorthToCenter:
+                case PlayerOneState.SouthToCenter:
+                case PlayerOneState.EastToCenter:
+                case PlayerOneState.WestToCenter:
+                    if (Vector2.Distance(playerOnePosition, insideNodePositions[SpaceStationSection.CENTER]) < playerOneMoveSpeed) {
+                        playerOnePosition = insideNodePositions[SpaceStationSection.CENTER];
+                        playerOneState = PlayerOneState.AtCenter;
+                        playerOneMoveStep = Vector2.Zero;
+                    }
+                    break;
+            }
         }
 
         /// <summary>
@@ -269,11 +388,27 @@ namespace SpaceStationScramble {
     };
 
     public enum PlayerOneState {
-        IDLE,
-        MOVING_UP,
-        MOVING_DOWN,
-        MOVING_LEFT,
-        MOVING_RIGHT
+        AtCenter,
+        AtNorth,
+        AtSouth,
+        AtEast,
+        AtWest,
+        CenterToNorth,
+        CenterToSouth,
+        CenterToEast,
+        CenterToWest,
+        NorthToCenter,
+        SouthToCenter,
+        EastToCenter,
+        WestToCenter
+    };
+
+    public enum InputKey {
+        None,
+        MoveUp,
+        MoveDown,
+        MoveLeft,
+        MoveRight
     };
 
     public enum ScreenContext {
