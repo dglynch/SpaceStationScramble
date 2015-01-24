@@ -184,7 +184,7 @@ namespace SpaceStationScramble {
                             try {
                                 synchronizer.AcceptKeyCode(keyCode);
                                 context = ScreenContext.READY_TO_START;
-                            } catch (InvalidKeyCodeException e) {
+                            } catch (InvalidKeyCodeException) {
                                 keyCode = string.Empty;
                             }
                         }
