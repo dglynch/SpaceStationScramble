@@ -516,6 +516,7 @@ namespace SpaceStationScramble {
                         //Draw the player
                         spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
                     }
+                    spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", gameTime.TotalGameTime.Minutes, gameTime.TotalGameTime.Seconds), new Vector2(10, 10), Color.White);
                     break;
             }
 
