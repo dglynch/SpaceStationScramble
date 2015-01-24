@@ -182,6 +182,11 @@ namespace SpaceStationScramble {
                                 keyCode = string.Empty;
                             }
                         }
+                        if (isNewlyPressedBack()) {
+                            if (keyCode.Length > 0) {
+                                keyCode = keyCode.Remove(keyCode.Length - 1);
+                            }
+                        }
                     }
                     break;
                 case ScreenContext.READY_TO_START:
@@ -457,7 +462,13 @@ namespace SpaceStationScramble {
                 || (currentKeyboardState.IsKeyDown(Keys.Enter) && !previousKeyboardState.IsKeyDown(Keys.Enter))
                 || (currentKeyboardState.IsKeyDown(Keys.Space) && !previousKeyboardState.IsKeyDown(Keys.Space));
         }
-    
+
+        private bool isNewlyPressedBack() {
+            return (currentGamepadState.IsButtonDown(Buttons.Back) && !previousGamepadState.IsButtonDown(Buttons.Back))
+                || (currentKeyboardState.IsKeyDown(Keys.Back) && !previousKeyboardState.IsKeyDown(Keys.Back))
+                || (currentKeyboardState.IsKeyDown(Keys.Delete) && !previousKeyboardState.IsKeyDown(Keys.Delete));
+        }
+
     }
 
     public enum PlayerNumber {
