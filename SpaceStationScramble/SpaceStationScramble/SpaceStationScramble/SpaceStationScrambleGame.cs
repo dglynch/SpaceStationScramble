@@ -36,6 +36,8 @@ namespace SpaceStationScramble {
         //Station info
         Dictionary<SpaceStationSection, Vector2> insideNodePositions;
 
+        ScreenContext context = ScreenContext.GAME_PLAY;
+
         //Player One info
         Texture2D playerOneSprite; //For animation this will need to updated
         Vector2 playerOnePosition;
@@ -131,45 +133,50 @@ namespace SpaceStationScramble {
             previousGamepadState = currentGamepadState;
             currentGamepadState = GamePad.GetState(PlayerIndex.One);
 
+            switch (context) {
+                case ScreenContext.CHARACTER_SELECTION:
+                    break;
+                case ScreenContext.GAME_PLAY:
+                    // Allows the game to exit
+                    if (currentGamepadState.Buttons.Back == ButtonState.Pressed
+                        || currentKeyboardState.IsKeyDown(Keys.Escape)) {
+                        this.Exit();
+                    }
 
-            // Allows the game to exit
-            if (currentGamepadState.Buttons.Back == ButtonState.Pressed
-                || currentKeyboardState.IsKeyDown(Keys.Escape)) {
-                this.Exit();
-            }
-
-            //Update player one
-            if (currentPlayer == PlayerNumber.ONE) {
-                //Gather input
-                if (currentGamepadState.IsButtonDown(Buttons.DPadUp)
-                    || currentKeyboardState.IsKeyDown(Keys.Up)) {
-                        if (playerOneCurrentSection == SpaceStationSection.CENTER ||
-                            playerOneCurrentSection == SpaceStationSection.SOUTH) {
-                            playerOneMoveStep = new Vector2(0.0f, -playerOneMoveSpeed);
+                    //Update player one
+                    if (currentPlayer == PlayerNumber.ONE) {
+                        //Gather input
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadUp)
+                            || currentKeyboardState.IsKeyDown(Keys.Up)) {
+                            if (playerOneCurrentSection == SpaceStationSection.CENTER ||
+                                playerOneCurrentSection == SpaceStationSection.SOUTH) {
+                                playerOneMoveStep = new Vector2(0.0f, -playerOneMoveSpeed);
+                            }
+                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadDown)
+                            || currentKeyboardState.IsKeyDown(Keys.Down)) {
+                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadLeft)
+                            || currentKeyboardState.IsKeyDown(Keys.Left)) {
+                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadRight)
+                            || currentKeyboardState.IsKeyDown(Keys.Right)) {
                         }
-                } else if (currentGamepadState.IsButtonDown(Buttons.DPadDown)
-                    || currentKeyboardState.IsKeyDown(Keys.Down)) {
-                } else if (currentGamepadState.IsButtonDown(Buttons.DPadLeft)
-                    || currentKeyboardState.IsKeyDown(Keys.Left)) {
-                } else if (currentGamepadState.IsButtonDown(Buttons.DPadRight)
-                    || currentKeyboardState.IsKeyDown(Keys.Right)) {
-                }
 
-                //Update player1 position
-                playerOnePosition += playerOneMoveStep;
-            } else {
-                if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
-                    playerTwoPosition.Y -= playerTwoMoveSpeed;
-                }
-                if (currentGamepadState.IsButtonDown(Buttons.DPadDown) || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S)) {
-                    playerTwoPosition.Y += playerTwoMoveSpeed;
-                }
-                if (currentGamepadState.IsButtonDown(Buttons.DPadRight) || currentKeyboardState.IsKeyDown(Keys.Right) || currentKeyboardState.IsKeyDown(Keys.D)) {
-                    playerTwoPosition.X += playerTwoMoveSpeed;
-                }
-                if (currentGamepadState.IsButtonDown(Buttons.DPadLeft) || currentKeyboardState.IsKeyDown(Keys.Left) || currentKeyboardState.IsKeyDown(Keys.A)) {
-                    playerTwoPosition.X -= playerTwoMoveSpeed;
-                }
+                        //Update player1 position
+                        playerOnePosition += playerOneMoveStep;
+                    } else {
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
+                            playerTwoPosition.Y -= playerTwoMoveSpeed;
+                        }
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadDown) || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S)) {
+                            playerTwoPosition.Y += playerTwoMoveSpeed;
+                        }
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadRight) || currentKeyboardState.IsKeyDown(Keys.Right) || currentKeyboardState.IsKeyDown(Keys.D)) {
+                            playerTwoPosition.X += playerTwoMoveSpeed;
+                        }
+                        if (currentGamepadState.IsButtonDown(Buttons.DPadLeft) || currentKeyboardState.IsKeyDown(Keys.Left) || currentKeyboardState.IsKeyDown(Keys.A)) {
+                            playerTwoPosition.X -= playerTwoMoveSpeed;
+                        }
+                    }
+                    break;
             }
 
             base.Update(gameTime);
@@ -183,24 +190,31 @@ namespace SpaceStationScramble {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            //Draw the background
-            if (currentPlayer == PlayerNumber.ONE) {
-                spriteBatch.Draw(playerOneBackground, Vector2.Zero, Color.White);
 
-                //For debugging node positions
-                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.NORTH], Color.Green);
-                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.SOUTH], Color.Green);
-                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.EAST], Color.Green);
-                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.WEST], Color.Green);
-                spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.CENTER], Color.Green);
+            switch (context) {
+                case ScreenContext.CHARACTER_SELECTION:
+                    break;
+                case ScreenContext.GAME_PLAY:
+                    //Draw the background
+                    if (currentPlayer == PlayerNumber.ONE) {
+                        spriteBatch.Draw(playerOneBackground, Vector2.Zero, Color.White);
 
-                //Draw the player
-                spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
-            } else {
-                spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
+                        //For debugging node positions
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.NORTH], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.SOUTH], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.EAST], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.WEST], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.CENTER], Color.Green);
 
-                //Draw the player
-                spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
+                        //Draw the player
+                        spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
+                    } else {
+                        spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
+
+                        //Draw the player
+                        spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
+                    }
+                    break;
             }
 
             spriteBatch.End();
