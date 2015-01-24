@@ -44,8 +44,6 @@ namespace SpaceStationScramble {
 
         ScreenContext context = ScreenContext.CHARACTER_SELECTION;
 
-        double menuLagTime = 0;
-
         //Player One info
         Texture2D playerOneSprite; //For animation this will need to updated
         Vector2 playerOnePosition;
@@ -144,30 +142,22 @@ namespace SpaceStationScramble {
 
             switch (context) {
                 case ScreenContext.CHARACTER_SELECTION:
-                    if (gameTime.TotalGameTime.TotalMilliseconds > menuLagTime) {
-                        if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
-                            if (currentPlayer == PlayerNumber.TWO) {
-                                currentPlayer = PlayerNumber.ONE;
-                                menuLagTime = gameTime.TotalGameTime.TotalMilliseconds + 100;
-                            }
-                        } else if (currentGamepadState.IsButtonDown(Buttons.DPadDown) || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S)) {
-                            if (currentPlayer == PlayerNumber.ONE) {
-                                currentPlayer = PlayerNumber.TWO;
-                                menuLagTime = gameTime.TotalGameTime.TotalMilliseconds + 100;
-                            }
+                    if (isNewlyPressedUp()) {
+                        if (currentPlayer == PlayerNumber.TWO) {
+                            currentPlayer = PlayerNumber.ONE;
                         }
-                        if (currentGamepadState.IsButtonDown(Buttons.Start) || currentKeyboardState.IsKeyDown(Keys.Enter) || currentKeyboardState.IsKeyDown(Keys.Space)) {
-                            context = ScreenContext.READY_TO_START;
-                            menuLagTime = gameTime.TotalGameTime.TotalMilliseconds + 100;
+                    } else if (isNewlyPressedDown()) {
+                        if (currentPlayer == PlayerNumber.ONE) {
+                            currentPlayer = PlayerNumber.TWO;
                         }
+                    }
+                    if (isNewlyPressedStart()) {
+                        context = ScreenContext.READY_TO_START;
                     }
                     break;
                 case ScreenContext.READY_TO_START:
-                    if (gameTime.TotalGameTime.TotalMilliseconds > menuLagTime) {
-                        if (currentGamepadState.IsButtonDown(Buttons.Start) || currentKeyboardState.IsKeyDown(Keys.Enter) || currentKeyboardState.IsKeyDown(Keys.Space)) {
-                            context = ScreenContext.GAME_PLAY;
-                            menuLagTime = gameTime.TotalGameTime.TotalMilliseconds + 100;
-                        }
+                    if (isNewlyPressedStart()) {
+                        context = ScreenContext.GAME_PLAY;
                     }
                     break;
                 case ScreenContext.GAME_PLAY:
