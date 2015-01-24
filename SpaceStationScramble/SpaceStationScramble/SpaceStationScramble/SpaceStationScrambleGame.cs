@@ -68,6 +68,9 @@ namespace SpaceStationScramble {
         float playerTwoMoveSpeed;
 
         //Disaster event info
+        //eww eww eww, gross, gross, gross
+        public static Texture2D steamTexture; 
+
         EventGenerator eventGenerator;
         DisasterEvent nextEvent;
         List<DisasterEvent> disasterEvents;
@@ -141,6 +144,8 @@ namespace SpaceStationScramble {
 
             playerOneSprite = Content.Load<Texture2D>("gfx/player");
             playerTwoSprite = Content.Load<Texture2D>("gfx/player");
+
+            steamTexture = Content.Load<Texture2D>("gfx/steam");
 
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
         }
@@ -551,6 +556,9 @@ namespace SpaceStationScramble {
                     TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int) elapsedRoundTime);
                     spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds), new Vector2(10, 10), Color.White);
                     for (int i = 0; i < disasterEvents.Count(); i++) {
+                        if (disasterEvents[i].VisibleToPlayer == currentPlayer) {
+                            disasterEvents[i].Draw(spriteBatch);
+                        }
                         if (Cheater.CheatsOn) {
                             spriteBatch.DrawString(font, "Event [" + i + "] time left: "
                                 + (int)((disasterEvents[i].EndTime - elapsedRoundTime) / 1000),

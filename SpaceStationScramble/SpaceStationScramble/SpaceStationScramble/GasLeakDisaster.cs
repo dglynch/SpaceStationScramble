@@ -42,13 +42,13 @@ namespace SpaceStationScramble {
         {
             switch (steamColor) {
                 case SteamColor.Red:
-                    spriteBatch.Draw(texture, Position, Color.Red);
+                    spriteBatch.Draw(SpaceStationScrambleGame.steamTexture, Position, Color.Red);
                     break;
                 case SteamColor.Blue:
-                    spriteBatch.Draw(texture, Position, Color.Blue);
+                    spriteBatch.Draw(SpaceStationScrambleGame.steamTexture, Position, Color.Blue);
                     break;
                 case SteamColor.Green:
-                    spriteBatch.Draw(texture, Position, Color.Green);
+                    spriteBatch.Draw(SpaceStationScrambleGame.steamTexture, Position, Color.Green);
                     break;
             }
         }
