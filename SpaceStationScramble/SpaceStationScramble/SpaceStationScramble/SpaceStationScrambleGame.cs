@@ -30,6 +30,7 @@ namespace SpaceStationScramble {
         PlayerNumber currentPlayer;
 
         //Textures
+        Texture2D characterSelectionBackground;
         Texture2D playerOneBackground;
         Texture2D playerTwoBackground;
 
@@ -106,6 +107,8 @@ namespace SpaceStationScramble {
         protected override void LoadContent() {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            characterSelectionBackground = Content.Load<Texture2D>("gfx/character-selection");
 
             playerOneBackground = Content.Load<Texture2D>("gfx/inside-rough");
             playerTwoBackground = Content.Load<Texture2D>("gfx/outside-rough");
@@ -193,6 +196,7 @@ namespace SpaceStationScramble {
 
             switch (context) {
                 case ScreenContext.CHARACTER_SELECTION:
+                    spriteBatch.Draw(characterSelectionBackground, Vector2.Zero, Color.White);
                     break;
                 case ScreenContext.GAME_PLAY:
                     //Draw the background
