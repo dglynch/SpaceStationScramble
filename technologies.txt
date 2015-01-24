@@ -1,0 +1,6 @@
+Visual Studio 2013
+Microsoft XNA Game Studio 4.0
+.NET Framework
+Git
+Gitolite
+Pivotal Tracker
