@@ -161,13 +161,27 @@ namespace SpaceStationScramble {
                     if (isNewlyPressedStart()) {
                         if (currentPlayer == PlayerNumber.ONE) {
                             keyCode = synchronizer.GenerateKeyCode();
+                        } else {
+                            keyCode = string.Empty;
                         }
                         context = ScreenContext.KEY_CODE;
                     }
                     break;
                 case ScreenContext.KEY_CODE:
-                    if (isNewlyPressedStart()) {
-                        context = ScreenContext.READY_TO_START;
+                    if (currentPlayer == PlayerNumber.ONE) {
+                        if (isNewlyPressedStart()) {
+                            context = ScreenContext.READY_TO_START;
+                        }
+                    } else {
+                        keyCode += getTypedCharacter();
+                        if (isNewlyPressedStart()) {
+                            try {
+                                synchronizer.AcceptKeyCode(keyCode);
+                                context = ScreenContext.READY_TO_START;
+                            } catch (InvalidKeyCodeException e) {
+                                keyCode = string.Empty;
+                            }
+                        }
                     }
                     break;
                 case ScreenContext.READY_TO_START:
@@ -222,6 +236,25 @@ namespace SpaceStationScramble {
             }
 
             base.Update(gameTime);
+        }
+
+        private string getTypedCharacter() {
+            Keys[] pressedKeys = currentKeyboardState.GetPressedKeys();
+            foreach (Keys key in pressedKeys) {
+                if (previousKeyboardState.IsKeyUp(key)) {
+                    string value = key.ToString();
+                    if (value.Length == 1) {
+                        if (value.CompareTo("A") >= 0 && value.CompareTo("Z") <= 0) {
+                            if (currentKeyboardState.IsKeyDown(Keys.LeftShift) || currentKeyboardState.IsKeyDown(Keys.RightShift)) {
+                                return value;
+                            } else {
+                                return value.ToLower();
+                            }
+                        }
+                    }
+                }
+            }
+            return string.Empty;
         }
 
         private void processPlayerOneInput(InputKey key) {
@@ -367,7 +400,10 @@ namespace SpaceStationScramble {
                     if (currentPlayer == PlayerNumber.ONE) {
                         spriteBatch.DrawString(font, keyCode, new Vector2(640 - font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
                     } else {
-
+                        spriteBatch.DrawString(font, keyCode, new Vector2(640 - font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
+                        if (gameTime.TotalGameTime.TotalMilliseconds % 1000 > 500) {
+                            spriteBatch.DrawString(font, "_", new Vector2(640 + font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
+                        }
                     }
                     break;
                 case ScreenContext.READY_TO_START:
