@@ -29,8 +29,12 @@ namespace SpaceStationScramble {
         string keyCode;
 
         PlayerNumber currentPlayer;
+        MenuItem currentMenuItem;
 
         //Textures
+        Texture2D titleScreenMenu;
+        Texture2D instructions;
+        Texture2D credits;
         Texture2D characterSelectionBackground;
         Texture2D menuSelector;
         Texture2D keyCodeBackground;
@@ -42,11 +46,13 @@ namespace SpaceStationScramble {
 
         Vector2 playerOneMenuPosition = new Vector2(450, 280);
         Vector2 playerTwoMenuPosition = new Vector2(450, 380);
+        Vector2 playerThreeMenuPosition = new Vector2(450, 480);
+        Vector2 playerFourMenuPosition = new Vector2(450, 580);
 
         //Station info
         Dictionary<SpaceStationSection, Vector2> insideNodePositions;
 
-        ScreenContext context = ScreenContext.CHARACTER_SELECTION;
+        ScreenContext context = ScreenContext.TITLE_SCREEN_MENU;
 
         //Player One info
         Texture2D playerOneSprite; //For animation this will need to updated
@@ -82,6 +88,7 @@ namespace SpaceStationScramble {
 
             //Start with player one for now
             currentPlayer = PlayerNumber.ONE;
+            currentMenuItem = MenuItem.NEW_GAME;
 
             //Setup space station information
             insideNodePositions = new Dictionary<SpaceStationSection, Vector2>();
@@ -113,11 +120,15 @@ namespace SpaceStationScramble {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            titleScreenMenu = Content.Load<Texture2D>("gfx/title-screen-menu");
+            instructions = Content.Load<Texture2D>("gfx/instructions");
+            credits = Content.Load<Texture2D>("gfx/credits");
             characterSelectionBackground = Content.Load<Texture2D>("gfx/character-selection");
             menuSelector = Content.Load<Texture2D>("gfx/player");
 
             keyCodeBackground = Content.Load<Texture2D>("gfx/key-code-background");
             readyStartBackground = Content.Load<Texture2D>("gfx/ready-start");
+
 
             playerOneBackground = Content.Load<Texture2D>("gfx/inside-rough");
             playerTwoBackground = Content.Load<Texture2D>("gfx/outside-rough");
@@ -148,6 +159,40 @@ namespace SpaceStationScramble {
             currentGamepadState = GamePad.GetState(PlayerIndex.One);
 
             switch (context) {
+                case ScreenContext.TITLE_SCREEN_MENU:
+                    if (isNewlyPressedUp()) {
+                        if (currentMenuItem != MenuItem.NEW_GAME) {
+                            currentMenuItem--;
+                        }
+                    }
+                    if (isNewlyPressedDown()) {
+                        if (currentMenuItem != MenuItem.EXIT) {
+                            currentMenuItem++;
+                        }
+                    }
+                    if (isNewlyPressedStart()) {
+                        switch (currentMenuItem) {
+                            case MenuItem.NEW_GAME:
+                                context = ScreenContext.CHARACTER_SELECTION;
+                                break;
+                            case MenuItem.INSTRUCTIONS:
+                                context = ScreenContext.INSTRUCTIONS;
+                                break;
+                            case MenuItem.CREDITS:
+                                context = ScreenContext.CREDITS;
+                                break;
+                            case MenuItem.EXIT:
+                                this.Exit();
+                                break;
+                        }
+                    }
+                    break;
+                case ScreenContext.INSTRUCTIONS:
+                case ScreenContext.CREDITS:
+                    if (isNewlyPressedStart() || isNewlyPressedBack()) {
+                        context = ScreenContext.TITLE_SCREEN_MENU;
+                    }
+                    break;
                 case ScreenContext.CHARACTER_SELECTION:
                     if (isNewlyPressedUp()) {
                         if (currentPlayer == PlayerNumber.TWO) {
@@ -167,7 +212,7 @@ namespace SpaceStationScramble {
                         context = ScreenContext.KEY_CODE;
                     }
                     if (isNewlyPressedBack()) {
-                        this.Exit();
+                        context = ScreenContext.TITLE_SCREEN_MENU;
                     }
                     break;
                 case ScreenContext.KEY_CODE:
@@ -202,14 +247,14 @@ namespace SpaceStationScramble {
                         context = ScreenContext.GAME_PLAY;
                     }
                     if (isNewlyPressedBack()) {
-                        context = ScreenContext.CHARACTER_SELECTION;
+                        context = ScreenContext.TITLE_SCREEN_MENU;
                     }
                     break;
                 case ScreenContext.GAME_PLAY:
                     // Allows the game to exit
                     if (currentGamepadState.Buttons.Back == ButtonState.Pressed
-                        || currentKeyboardState.IsKeyDown(Keys.Escape)) {
-                        this.Exit();
+                            || currentKeyboardState.IsKeyDown(Keys.Escape)) {
+                        context = ScreenContext.TITLE_SCREEN_MENU;
                     }
 
                     //Update player one
@@ -403,6 +448,29 @@ namespace SpaceStationScramble {
             spriteBatch.Begin();
 
             switch (context) {
+                case ScreenContext.TITLE_SCREEN_MENU:
+                    spriteBatch.Draw(titleScreenMenu, Vector2.Zero, Color.White);
+                    switch (currentMenuItem) {
+                        case MenuItem.NEW_GAME:
+                            spriteBatch.Draw(menuSelector, playerOneMenuPosition, Color.White);
+                            break;
+                        case MenuItem.INSTRUCTIONS:
+                            spriteBatch.Draw(menuSelector, playerTwoMenuPosition, Color.White);
+                            break;
+                        case MenuItem.CREDITS:
+                            spriteBatch.Draw(menuSelector, playerThreeMenuPosition, Color.White);
+                            break;
+                        case MenuItem.EXIT:
+                            spriteBatch.Draw(menuSelector, playerFourMenuPosition, Color.White);
+                            break;
+                    }
+                    break;
+                case ScreenContext.INSTRUCTIONS:
+                    spriteBatch.Draw(instructions, Vector2.Zero, Color.White);
+                    break;
+                case ScreenContext.CREDITS:
+                    spriteBatch.Draw(credits, Vector2.Zero, Color.White);
+                    break;
                 case ScreenContext.CHARACTER_SELECTION:
                     spriteBatch.Draw(characterSelectionBackground, Vector2.Zero, Color.White);
                     if (currentPlayer == PlayerNumber.ONE) {
@@ -520,9 +588,19 @@ namespace SpaceStationScramble {
     };
 
     public enum ScreenContext {
+        TITLE_SCREEN_MENU,
+        INSTRUCTIONS,
+        CREDITS,
         CHARACTER_SELECTION,
         KEY_CODE,
         READY_TO_START,
         GAME_PLAY
+    }
+
+    public enum MenuItem {
+        NEW_GAME,
+        INSTRUCTIONS,
+        CREDITS,
+        EXIT
     }
 }

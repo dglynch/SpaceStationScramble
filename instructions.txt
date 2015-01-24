@@ -1,0 +1,7 @@
+Two players must co-operate to survive during a space station disaster.
+
+One player is the Commander inside the space station, and the other is the Flight Engineer on a spacewalk. Each player can see various things and take various actions.
+
+The Commander can see what actions the Flight Engineer must take to save the station. The Flight Engineer can see what actions the Commander must take. Without helping each other, both astronauts will die.
+
+The players should be able to hear each other speak, but should not be able to see each other's screens.
