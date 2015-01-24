@@ -404,6 +404,9 @@ namespace SpaceStationScramble {
                         if (gameTime.TotalGameTime.TotalMilliseconds % 1000 > 500) {
                             spriteBatch.DrawString(font, "_", new Vector2(640 + font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
                         }
+                        if (Cheater.CheatsOn) {
+                            spriteBatch.DrawString(font, "GadgetKeyDustChild", new Vector2(20, 20), Color.Yellow, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
+                        }
                     }
                     break;
                 case ScreenContext.READY_TO_START:
