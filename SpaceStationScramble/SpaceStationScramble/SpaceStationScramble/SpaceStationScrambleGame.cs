@@ -729,6 +729,8 @@ namespace SpaceStationScramble {
         private void setInitialGameState() {
             currentlyClosingValve = GasValve.NONE;
             valveClosingEndTime = Double.MaxValue;
+            repairing = false;
+            repairEndTime = Double.MaxValue;
 
             //initialize player one properties
             playerOneMoveSpeed = 3.0f;
