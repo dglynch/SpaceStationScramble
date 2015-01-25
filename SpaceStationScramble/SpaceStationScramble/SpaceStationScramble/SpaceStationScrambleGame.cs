@@ -93,6 +93,13 @@ namespace SpaceStationScramble {
         SoundEffect titleMusic;
         SoundEffectInstance titleMusicInstance;
 
+        SoundEffect musicLoop1;
+        SoundEffect musicLoop2;
+        SoundEffect musicLoop3;
+        SoundEffectInstance musicLoopInstance;
+
+        int currentMusic;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -169,6 +176,10 @@ namespace SpaceStationScramble {
             titleMusicInstance = titleMusic.CreateInstance();
             titleMusicInstance.IsLooped = true;
             titleMusicInstance.Play();
+
+            musicLoop1 = Content.Load<SoundEffect>("sound/MUSIC LOOP 1");
+            musicLoop2 = Content.Load<SoundEffect>("sound/MUSIC LOOP 2");
+            musicLoop3 = Content.Load<SoundEffect>("sound/MUSIC LOOP 3");
         }
 
         /// <summary>
@@ -226,6 +237,7 @@ namespace SpaceStationScramble {
                 case ScreenContext.INSTRUCTIONS:
                 case ScreenContext.CREDITS:
                 case ScreenContext.DEATH:
+                    musicLoopInstance.Stop();
                     if (titleMusicInstance.Volume * 1.05f < 1) {
                         titleMusicInstance.Volume += 0.001f;
                         titleMusicInstance.Volume *= 1.05f;
@@ -302,6 +314,9 @@ namespace SpaceStationScramble {
                         titleMusicInstance.Volume *= 0.95f;
                     } else {
                         titleMusicInstance.Volume = 0;
+                    }
+                    if (musicLoopInstance.State != SoundState.Playing) {
+                        nextMusic();
                     }
                     // Allows the game to exit
                     if (currentGamepadState.Buttons.Back == ButtonState.Pressed
@@ -399,6 +414,28 @@ namespace SpaceStationScramble {
             base.Update(gameTime);
         }
 
+        private void nextMusic() {
+            currentMusic++;
+            if (currentMusic >= 6) {
+                currentMusic = 5;
+            }
+            switch (currentMusic) {
+                case 0:
+                case 1:
+                    musicLoopInstance = musicLoop1.CreateInstance();
+                    break;
+                case 2:
+                case 3:
+                    musicLoopInstance = musicLoop2.CreateInstance();
+                    break;
+                case 4:
+                case 5:
+                    musicLoopInstance = musicLoop3.CreateInstance();
+                    break;
+            }
+            musicLoopInstance.Play();
+        }
+
         private void setInitialGameState() {
             currentlyClosingValve = GasValve.NONE;
             valveClosingEndTime = Double.MaxValue;
@@ -418,6 +455,10 @@ namespace SpaceStationScramble {
             eventGenerator = new EventGenerator(synchronizer);
             elapsedRoundTime = 0;
             nextEvent = eventGenerator.NextEvent();
+
+            musicLoopInstance = musicLoop1.CreateInstance();
+            musicLoopInstance.Play();
+            currentMusic = 0;
         }
 
         private void beginClosingGasValve(GasValve gasValve) {
