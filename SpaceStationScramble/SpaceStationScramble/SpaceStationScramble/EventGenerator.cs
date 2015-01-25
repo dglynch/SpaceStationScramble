@@ -6,7 +6,7 @@ using System.Text;
 namespace SpaceStationScramble {
     class EventGenerator {
 
-        private Synchronizer syncronizer;
+        private Synchronizer synchronizer;
         //Slots mapped to time that slot will be free
         private Dictionary<EventSlot, long> eventSlots;
         private int minEventInterval;
@@ -14,8 +14,8 @@ namespace SpaceStationScramble {
         private int minDuration;
         private int maxDuration;
 
-        public EventGenerator(Synchronizer syncronizer) {
-            this.syncronizer = syncronizer;
+        public EventGenerator(Synchronizer synchronizer) {
+            this.synchronizer = synchronizer;
             //Eventually these times will change as time goes on
             minEventInterval = 12000;
             maxEventInterval = 17000;
@@ -31,15 +31,15 @@ namespace SpaceStationScramble {
         public DisasterEvent NextEvent() {
             //Next event time is last event time plus random value
             var slots = Enum.GetValues(typeof(EventSlot));
-            EventSlot nextSlot = (EventSlot)(slots.GetValue(syncronizer.Next(0, slots.Length)));
+            EventSlot nextSlot = (EventSlot)(slots.GetValue(synchronizer.Next(0, slots.Length)));
 
-            long nextEventTime = eventSlots[nextSlot] + syncronizer.Next(minEventInterval, maxEventInterval);
-            long eventDuration = syncronizer.Next(minDuration, maxDuration); //TODO random durations?
+            long nextEventTime = eventSlots[nextSlot] + synchronizer.Next(minEventInterval, maxEventInterval);
+            long eventDuration = synchronizer.Next(minDuration, maxDuration); //TODO random durations?
             eventSlots[nextSlot] = nextEventTime + eventDuration;
 
             //Currently only creating gas leaks
             var steamColors = Enum.GetValues(typeof(SteamColor));
-            SteamColor steamColor = (SteamColor)(steamColors.GetValue(syncronizer.Next(0, steamColors.Length)));
+            SteamColor steamColor = (SteamColor)(steamColors.GetValue(synchronizer.Next(0, steamColors.Length)));
             return new GasLeakDisaster(nextSlot, nextEventTime, nextEventTime + eventDuration, steamColor);
         }
     }
