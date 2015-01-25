@@ -1054,6 +1054,10 @@ namespace SpaceStationScramble {
                         EventSlot visibleSlot = EventSlot.Center;
                         bool somethingVisible = false;
 
+                        //Draw the player
+                        spriteBatch.Draw(playerOneSprite, new Vector2(playerOnePosition.X - playerOneSprite.Width / 2,
+                            playerOnePosition.Y - playerOneSprite.Height / 2), Color.White);
+
                         switch (playerOneState) {
                             case PlayerOneState.AtCenter:
                                 currentValves = centreValves;
@@ -1115,10 +1119,6 @@ namespace SpaceStationScramble {
                                 spriteBatch.DrawString(font, "O", new Vector2(currentValves.X + 52, currentValves.Y + 34), Color.White, rotation, Vector2.Zero, 0.25f, SpriteEffects.None, 0f);
                                 break;
                         }
-
-                        //Draw the player
-                        spriteBatch.Draw(playerOneSprite, new Vector2 (playerOnePosition.X - playerOneSprite.Width /2,
-                            playerOnePosition.Y - playerOneSprite.Height /2), Color.White);
 
                         foreach (DisasterEvent theEvent in disasterEvents) {
                             if (theEvent is RepairDisaster) {
