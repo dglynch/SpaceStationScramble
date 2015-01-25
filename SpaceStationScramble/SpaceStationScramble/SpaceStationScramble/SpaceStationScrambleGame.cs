@@ -1036,19 +1036,19 @@ namespace SpaceStationScramble {
                     if (currentPlayer == PlayerNumber.ONE) {
                         spriteBatch.Draw(playerOneBackground, Vector2.Zero, Color.White);
 
-                        Vector2 centreValves = new Vector2(740, 470);
-                        Vector2 eastValves = new Vector2(1100, 360);
-                        Vector2 northValves = new Vector2(740, 20);
-                        Vector2 southValves = new Vector2(740, 650);
-                        Vector2 westValves = new Vector2(130, 360);
+                        Vector2 centreValves = new Vector2(680, 370);
+                        Vector2 eastValves = new Vector2(1020, 370);
+                        Vector2 northValves = new Vector2(680, 60);
+                        Vector2 southValves = new Vector2(680, 650);
+                        Vector2 westValves = new Vector2(340, 370);
                         Vector2 offScreenValves = new Vector2(-1000, -1000);
                         Vector2 currentValves;
 
-                        Vector2 centerDisplay = new Vector2(600, 312);
-                        Vector2 eastDisplay = new Vector2(1100, 312);
-                        Vector2 westDisplay = new Vector2(130, 312);
-                        Vector2 northDisplay = new Vector2(600, 20);
-                        Vector2 southDisplay = new Vector2(600, 650);
+                        Vector2 centerDisplay = new Vector2(560, 310);
+                        Vector2 eastDisplay = new Vector2(920, 310);
+                        Vector2 westDisplay = new Vector2(240, 312);
+                        Vector2 northDisplay = new Vector2(570, 30);
+                        Vector2 southDisplay = new Vector2(570, 580);
                         Vector2 currentDisplayLoc;
 
                         EventSlot visibleSlot = EventSlot.Center;
