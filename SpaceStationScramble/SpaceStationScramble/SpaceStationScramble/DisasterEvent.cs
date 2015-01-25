@@ -7,6 +7,12 @@ using System.Text;
 
 namespace SpaceStationScramble {
     abstract class DisasterEvent {
+
+        public EventSlot Slot {
+            get;
+            protected set;
+        }
+
         public PlayerNumber VisibleToPlayer {
             get;
             protected set;
@@ -27,9 +33,10 @@ namespace SpaceStationScramble {
             protected set;
         }
 
-        public DisasterEvent(long startTime, long endTime) {
+        public DisasterEvent(EventSlot slot, long startTime, long endTime) {
             this.StartTime = startTime;
             this.EndTime = endTime;
+            this.Slot = slot;
         }
 
         public void Update() {
@@ -38,4 +45,12 @@ namespace SpaceStationScramble {
 
         public abstract void Draw(SpriteBatch spriteBatch);
     }
+
+    public enum EventSlot {
+        North,
+        South,
+        East,
+        West,
+        Center
+    };
 }

@@ -78,6 +78,7 @@
     <Compile Include="GasLeakDisaster.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="RepairDisaster.cs" />
     <Compile Include="SpaceStationScrambleGame.cs" />
     <Compile Include="Synchronizer.cs" />
   </ItemGroup>

@@ -72,12 +72,13 @@ namespace SpaceStationScramble {
         //Disaster event info
         //eww eww eww, gross, gross, gross
         public static Texture2D steamTexture;
+        public static Texture2D alarmTexture;
+        public static Texture2D circleTexture;
 
         Texture2D satelliteDishTexture;
         Texture2D hatchTexture;
         Texture2D pipeTexture;
         Texture2D tankTexture;
-        Texture2D circleTexture;
 
         EventGenerator eventGenerator;
         DisasterEvent nextEvent;
@@ -194,6 +195,7 @@ namespace SpaceStationScramble {
             satelliteDishTexture = Content.Load<Texture2D>("gfx/satellite");
             pipeTexture = Content.Load<Texture2D>("gfx/SolarPanel");
             circleTexture = Content.Load<Texture2D>("gfx/circle");
+            alarmTexture = Content.Load<Texture2D>("gfx/alarm");
 
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
 
@@ -381,7 +383,7 @@ namespace SpaceStationScramble {
                     }
 
                     foreach (DisasterEvent theEvent in eventsToRemove) {
-                       disasterEvents.Remove(theEvent);
+                        disasterEvents.Remove(theEvent);
                     }
                     eventsToRemove.Clear();
 
@@ -530,7 +532,7 @@ namespace SpaceStationScramble {
         private void removePendingGasLeak(GasValve gasValve, PlayerOneState playerOneState) {
             var eventsToRemove = new List<DisasterEvent>();
             foreach (var disaster in disasterEvents) {
-                GasLeakDisaster gld = (GasLeakDisaster) disaster;
+                GasLeakDisaster gld = (GasLeakDisaster)disaster;
                 if (sameColor(gasValve, gld.SteamColor) && sameLocation(playerOneState, gld.Position)) {
                     eventsToRemove.Add(disaster);
                 }
@@ -792,7 +794,7 @@ namespace SpaceStationScramble {
 
                         Vector2 currentValves;
 
-                        switch(playerOneState) {
+                        switch (playerOneState) {
                             case PlayerOneState.AtCenter:
                                 currentValves = centreValves;
                                 break;
@@ -814,7 +816,7 @@ namespace SpaceStationScramble {
                         }
                         spriteBatch.Draw(valvePanel, currentValves, Color.White);
 
-                        float rotation = (float) (gameTime.TotalGameTime.TotalMilliseconds % 500 * 2 * Math.PI / 500);
+                        float rotation = (float)(gameTime.TotalGameTime.TotalMilliseconds % 500 * 2 * Math.PI / 500);
                         switch (currentlyClosingValve) {
                             case GasValve.NONE:
                                 break;
@@ -869,7 +871,7 @@ namespace SpaceStationScramble {
                         //Draw the repair icons if close to the items to repair
                         drawRepairIcon(spriteBatch);
                     }
-                    TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int) elapsedRoundTime);
+                    TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)elapsedRoundTime);
                     spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds), new Vector2(10, 10), Color.White);
                     foreach (DisasterEvent disaster in disasterEvents) {
                         if (disaster.VisibleToPlayer == currentPlayer) {
@@ -919,7 +921,7 @@ namespace SpaceStationScramble {
                 spriteBatch.Draw(circleTexture, westTankPos + repairIconOffset, Color.Blue);
             } else if (Vector2.Distance(playerTwoPosition, centerTankPos) < repairRadius) {
                 spriteBatch.Draw(circleTexture, centerTankPos + repairIconOffset, Color.Blue);
-            }  else if (Vector2.Distance(playerTwoPosition, northSatPos) < repairRadius) {
+            } else if (Vector2.Distance(playerTwoPosition, northSatPos) < repairRadius) {
                 spriteBatch.Draw(circleTexture, northSatPos + repairIconOffset, Color.Yellow);
             } else if (Vector2.Distance(playerTwoPosition, southSatPos) < repairRadius) {
                 spriteBatch.Draw(circleTexture, southSatPos + repairIconOffset, Color.Yellow);
