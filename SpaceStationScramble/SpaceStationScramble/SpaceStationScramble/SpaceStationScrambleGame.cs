@@ -104,7 +104,13 @@ namespace SpaceStationScramble {
         SoundEffect musicLoop3;
         SoundEffectInstance musicLoopInstance;
 
+        SoundEffect gasLeakSound1;
+        SoundEffect gasLeakSound2;
+        SoundEffect gasLeakSound3;
+
         int currentMusic;
+
+        private IDictionary<DisasterEvent, SoundEffectInstance> disasterSounds = new Dictionary<DisasterEvent, SoundEffectInstance>();
 
         private readonly Vector2 northSatPos = new Vector2(580, 50);
         private readonly Vector2 northTankPos = new Vector2(690, 50);
@@ -217,6 +223,10 @@ namespace SpaceStationScramble {
             musicLoop1 = Content.Load<SoundEffect>("sound/MUSIC LOOP 1");
             musicLoop2 = Content.Load<SoundEffect>("sound/MUSIC LOOP 2");
             musicLoop3 = Content.Load<SoundEffect>("sound/MUSIC LOOP 3");
+
+            gasLeakSound1 = Content.Load<SoundEffect>("sound/Pressure Burst and Leak 1");
+            gasLeakSound2 = Content.Load<SoundEffect>("sound/Pressure Burst and Leak 2");
+            gasLeakSound3 = Content.Load<SoundEffect>("sound/Pressure Burst and Leak 3");
         }
 
         /// <summary>
@@ -368,6 +378,10 @@ namespace SpaceStationScramble {
 
                     if (nextEvent.StartTime <= elapsedRoundTime) {
                         disasterEvents.Add(nextEvent);
+                        if (nextEvent.VisibleToPlayer == currentPlayer) {
+                            disasterSounds[nextEvent] = getDisasterSoundInstance(nextEvent);
+                            disasterSounds[nextEvent].Play();
+                        }
                         nextEvent = eventGenerator.NextEvent();
                     }
 
@@ -379,6 +393,9 @@ namespace SpaceStationScramble {
                                 deathTime = gameTime.TotalGameTime;
                                 groanAndExplosion.Play();
                                 context = ScreenContext.DEATH;
+                            } else {
+                                disasterSounds[theEvent].Stop();
+                                disasterSounds.Remove(theEvent);
                             }
                         } else {
                             theEvent.Update();
@@ -454,6 +471,25 @@ namespace SpaceStationScramble {
             base.Update(gameTime);
         }
 
+        private int gasLeakSoundRotator = 0;
+
+        private SoundEffectInstance getDisasterSoundInstance(DisasterEvent nextEvent) {
+            if (nextEvent is GasLeakDisaster) {
+                gasLeakSoundRotator++;
+                switch (gasLeakSoundRotator % 3) {
+                    case 0:
+                        return gasLeakSound1.CreateInstance();
+                    case 1:
+                        return gasLeakSound2.CreateInstance();
+                    default:
+                        return gasLeakSound3.CreateInstance();
+                }
+            } else {
+                // TODO: repair disaster type goes here (i.e. alarm sound)
+                return negativeFeedback.CreateInstance();
+            }
+        }
+
         private void nextMusic() {
             currentMusic++;
             if (currentMusic >= 6) {
@@ -473,6 +509,7 @@ namespace SpaceStationScramble {
                     musicLoopInstance = musicLoop3.CreateInstance();
                     break;
             }
+            musicLoopInstance.Volume = 0.1f;
             musicLoopInstance.Play();
         }
 
@@ -497,6 +534,7 @@ namespace SpaceStationScramble {
             nextEvent = eventGenerator.NextEvent();
 
             musicLoopInstance = musicLoop1.CreateInstance();
+            musicLoopInstance.Volume = 0.5f;
             musicLoopInstance.Play();
             currentMusic = 0;
         }
