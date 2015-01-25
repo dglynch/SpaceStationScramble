@@ -672,9 +672,13 @@ namespace SpaceStationScramble {
                                 && repairEvent.StationPart == currentRepairPart.Part) {
                                     eventsToRemove.Add(theEvent);
                                     currentRepairPart.Active = false;
-                                    affirmativeFeedback.Play();
                             }
                         }
+                    }
+                    if (eventsToRemove.Count > 0) {
+                        affirmativeFeedback.Play();
+                    } else {
+                        negativeFeedback.Play();
                     }
                     disasterEvents = disasterEvents.Except(eventsToRemove).ToList();
                 }
