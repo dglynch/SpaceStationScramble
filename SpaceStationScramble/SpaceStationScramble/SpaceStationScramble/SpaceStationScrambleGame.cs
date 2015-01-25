@@ -389,6 +389,48 @@ namespace SpaceStationScramble {
         private void finishClosingGasValve(GasValve gasValve) {
             currentlyClosingValve = GasValve.NONE;
             valveClosingEndTime = Double.MaxValue;
+            removePendingGasLeak(gasValve, playerOneState);
+        }
+
+        private void removePendingGasLeak(GasValve gasValve, PlayerOneState playerOneState) {
+            var eventsToRemove = new List<DisasterEvent>();
+            foreach (var disaster in disasterEvents) {
+                GasLeakDisaster gld = (GasLeakDisaster) disaster;
+                if (sameColor(gasValve, gld.SteamColor) && sameLocation(playerOneState, gld.Position)) {
+                    eventsToRemove.Add(disaster);
+                }
+            }
+            disasterEvents = disasterEvents.Except(eventsToRemove).ToList();
+        }
+
+        private bool sameColor(GasValve gasValve, SteamColor steamColor) {
+            if (gasValve == GasValve.BLUE && steamColor == SteamColor.Blue) {
+                return true;
+            } else if (gasValve == GasValve.YELLOW && steamColor == SteamColor.Yellow) {
+                return true;
+            } else if (gasValve == GasValve.GREEN && steamColor == SteamColor.Green) {
+                return true;
+            } else if (gasValve == GasValve.RED && steamColor == SteamColor.Red) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        private bool sameLocation(PlayerOneState playerOneState, Vector2 position) {
+            if (playerOneState == PlayerOneState.AtCenter && position == insideNodePositions[SpaceStationSection.CENTER]) {
+                return true;
+            } else if (playerOneState == PlayerOneState.AtEast && position == insideNodePositions[SpaceStationSection.EAST]) {
+                return true;
+            } else if (playerOneState == PlayerOneState.AtNorth && position == insideNodePositions[SpaceStationSection.NORTH]) {
+                return true;
+            } else if (playerOneState == PlayerOneState.AtSouth && position == insideNodePositions[SpaceStationSection.SOUTH]) {
+                return true;
+            } else if (playerOneState == PlayerOneState.AtWest && position == insideNodePositions[SpaceStationSection.WEST]) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         private string getTypedCharacter() {
