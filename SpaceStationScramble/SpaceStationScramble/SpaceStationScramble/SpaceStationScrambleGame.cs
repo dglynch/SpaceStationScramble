@@ -43,6 +43,7 @@ namespace SpaceStationScramble {
         Texture2D playerOneBackground;
         Texture2D playerTwoBackground;
         Texture2D valvePanel;
+        Texture2D displayTexture;
 
         SpriteFont font;
 
@@ -202,6 +203,7 @@ namespace SpaceStationScramble {
             pipeTexture = Content.Load<Texture2D>("gfx/SolarPanel");
             circleTexture = Content.Load<Texture2D>("gfx/circle");
             alarmTexture = Content.Load<Texture2D>("gfx/alarm");
+            displayTexture = Content.Load<Texture2D>("gfx/Screen");
 
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
 
@@ -819,40 +821,64 @@ namespace SpaceStationScramble {
                     if (currentPlayer == PlayerNumber.ONE) {
                         spriteBatch.Draw(playerOneBackground, Vector2.Zero, Color.White);
 
-                        //For debugging node positions
-                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.NORTH], Color.Green);
-                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.SOUTH], Color.Green);
-                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.EAST], Color.Green);
-                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.WEST], Color.Green);
-                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.CENTER], Color.Green);
-
                         Vector2 centreValves = new Vector2(740, 470);
                         Vector2 eastValves = new Vector2(1100, 360);
                         Vector2 northValves = new Vector2(740, 20);
                         Vector2 southValves = new Vector2(740, 650);
                         Vector2 westValves = new Vector2(130, 360);
                         Vector2 offScreenValves = new Vector2(-1000, -1000);
-
                         Vector2 currentValves;
+
+                        Vector2 centerDisplay = new Vector2(600, 312);
+                        Vector2 eastDisplay = new Vector2(1100, 312);
+                        Vector2 westDisplay = new Vector2(130, 312);
+                        Vector2 northDisplay = new Vector2(600, 20);
+                        Vector2 southDisplay = new Vector2(600, 650);
+                        Vector2 currentDisplayLoc;
+
+                        EventSlot visibleSlot = EventSlot.Center;
+                        bool somethingVisible = false;
 
                         switch (playerOneState) {
                             case PlayerOneState.AtCenter:
                                 currentValves = centreValves;
+                                currentDisplayLoc = centerDisplay;
+                                spriteBatch.Draw(displayTexture, centerDisplay, Color.White);
+                                visibleSlot = EventSlot.Center;
+                                somethingVisible = true;
                                 break;
                             case PlayerOneState.AtEast:
                                 currentValves = eastValves;
+                                currentDisplayLoc = eastDisplay;
+                                spriteBatch.Draw(displayTexture, eastDisplay, Color.White);
+                                visibleSlot = EventSlot.East;
+                                somethingVisible = true;
                                 break;
                             case PlayerOneState.AtNorth:
                                 currentValves = northValves;
+                                currentDisplayLoc = northDisplay;
+                                spriteBatch.Draw(displayTexture, northDisplay, Color.White);
+                                visibleSlot = EventSlot.North;
+                                somethingVisible = true;
                                 break;
                             case PlayerOneState.AtSouth:
                                 currentValves = southValves;
+                                currentDisplayLoc = southDisplay;
+                                spriteBatch.Draw(displayTexture, southDisplay, Color.White);
+                                visibleSlot = EventSlot.South;
+                                somethingVisible = true;
                                 break;
                             case PlayerOneState.AtWest:
                                 currentValves = westValves;
+                                currentDisplayLoc = westDisplay;
+                                spriteBatch.Draw(displayTexture, westDisplay, Color.White);
+                                visibleSlot = EventSlot.West;
+                                somethingVisible = true;
                                 break;
                             default:
                                 currentValves = offScreenValves;
+                                currentDisplayLoc = offScreenValves;
+                                somethingVisible = false;
                                 break;
                         }
                         spriteBatch.Draw(valvePanel, currentValves, Color.White);
@@ -877,6 +903,34 @@ namespace SpaceStationScramble {
 
                         //Draw the player
                         spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
+
+                        foreach(DisasterEvent theEvent in disasterEvents) {
+                            if (theEvent is RepairDisaster) {
+                                RepairDisaster repairDis = theEvent as RepairDisaster;
+                                if (somethingVisible && repairDis.Slot == visibleSlot) {
+                                    switch (repairDis.StationPart) {
+                                        case StationPart.Hatch:
+                                            spriteBatch.Draw(hatchTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            break;
+                                        case StationPart.O2Tank:
+                                            spriteBatch.Draw(tankTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            break;
+                                        case StationPart.Pipe:
+                                            spriteBatch.Draw(pipeTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            break;
+                                        case StationPart.SatelliteDish:
+                                            spriteBatch.Draw(satelliteDishTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            break;
+                                    }
+                                }
+                            }
+                        }
+
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.NORTH], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.SOUTH], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.EAST], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.WEST], Color.Green);
+                        spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.CENTER], Color.Green);
                     } else {
                         spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
 
