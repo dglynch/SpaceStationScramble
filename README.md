@@ -76,14 +76,14 @@ To build this project you need to install Microsoft Visual Studio 2013 (any edit
 Credits
 --------------------------------------
 
-## Programming
+### Programming
 Alexander Allin
 Dan Lynch
 
-## Sound
+### Sound
 Sam Robinson
 
-#Graphics
+### Graphics
 Andrea Mele
 
 
