@@ -20,7 +20,7 @@ namespace SpaceStationScramble {
             minEventInterval = 12000;
             maxEventInterval = 17000;
             minDuration = 10000;
-            maxDuration = 17000;
+            maxDuration = 27000;
 
             eventSlots = new Dictionary<EventSlot, long>();
             foreach(EventSlot slot in Enum.GetValues(typeof (EventSlot))) {
