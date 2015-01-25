@@ -589,9 +589,11 @@ namespace SpaceStationScramble {
         private void removePendingGasLeak(GasValve gasValve, PlayerOneState playerOneState) {
             var eventsToRemove = new List<DisasterEvent>();
             foreach (var disaster in disasterEvents) {
-                GasLeakDisaster gld = (GasLeakDisaster)disaster;
-                if (sameColor(gasValve, gld.SteamColor) && sameLocation(playerOneState, gld.Position)) {
-                    eventsToRemove.Add(disaster);
+                if (disaster is GasLeakDisaster) {
+                    GasLeakDisaster gld = (GasLeakDisaster)disaster;
+                    if (sameColor(gasValve, gld.SteamColor) && sameLocation(playerOneState, gld.Position)) {
+                        eventsToRemove.Add(disaster);
+                    }
                 }
             }
             if (eventsToRemove.Count > 0) {
