@@ -85,6 +85,9 @@ namespace SpaceStationScramble {
         SoundEffectInstance valve;
         bool valveSwap;
 
+        SoundEffect affirmativeFeedback;
+        SoundEffect negativeFeedback;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -151,6 +154,9 @@ namespace SpaceStationScramble {
 
             valveTurn1 = Content.Load<SoundEffect>("sound/Valve Turn 1");
             valveTurn2 = Content.Load<SoundEffect>("sound/Valve Turn 2");
+
+            affirmativeFeedback = Content.Load<SoundEffect>("sound/Affirmative FB");
+            negativeFeedback = Content.Load<SoundEffect>("sound/Negative FB");
         }
 
         /// <summary>
@@ -421,6 +427,11 @@ namespace SpaceStationScramble {
                 if (sameColor(gasValve, gld.SteamColor) && sameLocation(playerOneState, gld.Position)) {
                     eventsToRemove.Add(disaster);
                 }
+            }
+            if (eventsToRemove.Count > 0) {
+                affirmativeFeedback.Play();
+            } else {
+                negativeFeedback.Play();
             }
             disasterEvents = disasterEvents.Except(eventsToRemove).ToList();
         }
