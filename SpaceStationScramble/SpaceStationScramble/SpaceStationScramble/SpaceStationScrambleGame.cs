@@ -89,6 +89,7 @@ namespace SpaceStationScramble {
         private double valveClosingEndTime;
 
         private double repairEndTime;
+        private bool repairing;
 
         SoundEffect valveTurn1;
         SoundEffect valveTurn2;
@@ -155,6 +156,8 @@ namespace SpaceStationScramble {
         private readonly Vector2 centerHatchPos = new Vector2(690, 425);
 
         private List<RepairPart> repairableParts;
+        private RepairPart currentRepairPart;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -556,13 +559,21 @@ namespace SpaceStationScramble {
 
                         //See if we're in range of any repairable parts
                         float repairRadius = 16.0f;
+                        bool partActive = false;
+                        repairing = false;
                         foreach (RepairPart part in repairableParts) {
                             if (Vector2.Distance(playerTwoPosition, part.Position) < repairRadius) {
+                                if (part.Active) {
+                                    partActive = true;
+                                }
+                                partActive = true;
                                 switch (part.Part) {
                                     case StationPart.Hatch:
                                         if (currentGamepadState.IsButtonDown(Buttons.B)) {
                                             if (!part.Active) {
                                                 startRepair(part);
+                                                repairing = true;
+                                                currentRepairPart = part;
                                             }
                                         }
                                         break;
@@ -570,6 +581,8 @@ namespace SpaceStationScramble {
                                         if (currentGamepadState.IsButtonDown(Buttons.X)) {
                                             if (!part.Active) {
                                                 startRepair(part);
+                                                repairing = true;
+                                                currentRepairPart = part;
                                             }
                                         }
                                         break;
@@ -577,6 +590,8 @@ namespace SpaceStationScramble {
                                         if (currentGamepadState.IsButtonDown(Buttons.A)) {
                                             if (!part.Active) {
                                                 startRepair(part);
+                                                repairing = true;
+                                                currentRepairPart = part;
                                             }
                                         }
                                         break;
@@ -584,6 +599,8 @@ namespace SpaceStationScramble {
                                         if (currentGamepadState.IsButtonDown(Buttons.Y)) {
                                             if (!part.Active) {
                                                 startRepair(part);
+                                                repairing = true;
+                                                currentRepairPart = part;
                                             }
                                         }
                                         break;
@@ -592,6 +609,13 @@ namespace SpaceStationScramble {
                                 part.Active = false;
                             }
                         }
+
+                        //Update the repair status
+                        if (partActive) {
+                            repairing = true;
+                        }
+
+                        updateRepairStatus();
                     }
                     break;
             }
@@ -635,6 +659,30 @@ namespace SpaceStationScramble {
         private void startRepair(RepairPart part) {
             part.Active = true;
             repairEndTime = elapsedRoundTime + 2000;
+        }
+
+        private void updateRepairStatus() {
+            if (repairEndTime <= elapsedRoundTime) {
+                if (currentRepairPart != null && currentRepairPart.Active) {
+                    var eventsToRemove = new List<DisasterEvent>();
+                    foreach (DisasterEvent theEvent in disasterEvents) {
+                        if (theEvent is RepairDisaster) {
+                            RepairDisaster repairEvent = theEvent as RepairDisaster;
+                            if (repairEvent.Slot == currentRepairPart.Slot
+                                && repairEvent.StationPart == currentRepairPart.Part) {
+                                    eventsToRemove.Add(theEvent);
+                                    currentRepairPart.Active = false;
+                            }
+                        }
+                    }
+                    if (eventsToRemove.Count > 0) {
+                        affirmativeFeedback.Play();
+                    } else {
+                        negativeFeedback.Play();
+                    }
+                    disasterEvents = disasterEvents.Except(eventsToRemove).ToList();
+                }
+            }
         }
 
         private int gasLeakSoundRotator = 0;
@@ -1171,7 +1219,7 @@ namespace SpaceStationScramble {
                         spriteBatch.Draw(circleTexture, part.Position + repairIconOffset, part.TintColor);
                     }
                 }
-            };
+            }
         }
 
         private bool isNewlyPressedUp() {
