@@ -722,7 +722,7 @@ namespace SpaceStationScramble {
                     musicLoopInstance = musicLoop3.CreateInstance();
                     break;
             }
-            musicLoopInstance.Volume = 0.1f;
+            musicLoopInstance.Volume = 0.5f;
             musicLoopInstance.Play();
         }
 
