@@ -27,6 +27,7 @@ namespace SpaceStationScramble {
         SpriteBatch spriteBatch;
         Synchronizer synchronizer;
         string keyCode;
+        TimeSpan deathTime;
 
         PlayerNumber currentPlayer;
         MenuItem currentMenuItem;
@@ -194,6 +195,7 @@ namespace SpaceStationScramble {
                     break;
                 case ScreenContext.INSTRUCTIONS:
                 case ScreenContext.CREDITS:
+                case ScreenContext.DEATH:
                     if (isNewlyPressedStart() || isNewlyPressedBack()) {
                         context = ScreenContext.TITLE_SCREEN_MENU;
                     }
@@ -274,6 +276,10 @@ namespace SpaceStationScramble {
                     foreach (DisasterEvent theEvent in disasterEvents) {
                         if (theEvent.EndTime <= elapsedRoundTime) {
                             eventsToRemove.Add(theEvent);
+                            if (theEvent.VisibleToPlayer != currentPlayer) {
+                                deathTime = gameTime.TotalGameTime;
+                                context = ScreenContext.DEATH;
+                            }
                         } else {
                             theEvent.Update();
                         }
@@ -529,7 +535,7 @@ namespace SpaceStationScramble {
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime) {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
 
@@ -665,6 +671,11 @@ namespace SpaceStationScramble {
                         }
                     }
                     break;
+                case ScreenContext.DEATH:
+                    Vector2 measureString = font.MeasureString("GAME OVER");
+                    spriteBatch.DrawString(font, "GAME OVER", new Vector2(640 - measureString.X / 2, 360 - measureString.Y / 2), Color.Red);
+                    spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", deathTime.Minutes, deathTime.Seconds), new Vector2(10, 10), Color.White);
+                    break;
             }
 
             spriteBatch.End();
@@ -742,7 +753,8 @@ namespace SpaceStationScramble {
         CHARACTER_SELECTION,
         KEY_CODE,
         READY_TO_START,
-        GAME_PLAY
+        GAME_PLAY,
+        DEATH
     }
 
     public enum MenuItem {
