@@ -220,7 +220,7 @@ namespace SpaceStationScramble {
             tankTexture = Content.Load<Texture2D>("gfx/O2Tank");
             hatchTexture = Content.Load<Texture2D>("gfx/hatch");
             satelliteDishTexture = Content.Load<Texture2D>("gfx/satellite");
-            pipeTexture = Content.Load<Texture2D>("gfx/SolarPanel");
+            pipeTexture = Content.Load<Texture2D>("gfx/pipes");
             circleTexture = Content.Load<Texture2D>("gfx/circle");
             alarmTexture = Content.Load<Texture2D>("gfx/alarm");
             displayTexture = Content.Load<Texture2D>("gfx/Screen");
