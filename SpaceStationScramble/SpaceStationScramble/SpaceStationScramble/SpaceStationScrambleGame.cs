@@ -90,6 +90,9 @@ namespace SpaceStationScramble {
 
         SoundEffect groanAndExplosion;
 
+        SoundEffect titleMusic;
+        SoundEffectInstance titleMusicInstance;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -161,6 +164,11 @@ namespace SpaceStationScramble {
             negativeFeedback = Content.Load<SoundEffect>("sound/Negative FB");
 
             groanAndExplosion = Content.Load<SoundEffect>("sound/Ship Groan and Explosion 1");
+
+            titleMusic = Content.Load<SoundEffect>("sound/Title Music - Loop");
+            titleMusicInstance = titleMusic.CreateInstance();
+            titleMusicInstance.IsLooped = true;
+            titleMusicInstance.Play();
         }
 
         /// <summary>
@@ -184,6 +192,10 @@ namespace SpaceStationScramble {
 
             switch (context) {
                 case ScreenContext.TITLE_SCREEN_MENU:
+                    if (titleMusicInstance.Volume * 1.05f < 1) {
+                        titleMusicInstance.Volume += 0.001f;
+                        titleMusicInstance.Volume *= 1.05f;
+                    }
                     if (isNewlyPressedUp()) {
                         if (currentMenuItem != MenuItem.NEW_GAME) {
                             currentMenuItem--;
@@ -214,6 +226,10 @@ namespace SpaceStationScramble {
                 case ScreenContext.INSTRUCTIONS:
                 case ScreenContext.CREDITS:
                 case ScreenContext.DEATH:
+                    if (titleMusicInstance.Volume * 1.05f < 1) {
+                        titleMusicInstance.Volume += 0.001f;
+                        titleMusicInstance.Volume *= 1.05f;
+                    }
                     if (isNewlyPressedStart() || isNewlyPressedBack()) {
                         context = ScreenContext.TITLE_SCREEN_MENU;
                     }
@@ -268,6 +284,11 @@ namespace SpaceStationScramble {
                     }
                     break;
                 case ScreenContext.READY_TO_START:
+                    if (titleMusicInstance.Volume > 0.01f) {
+                        titleMusicInstance.Volume *= 0.95f;
+                    } else {
+                        titleMusicInstance.Volume = 0;
+                    }
                     if (isNewlyPressedStart()) {
                         setInitialGameState();
                         context = ScreenContext.GAME_PLAY;
@@ -277,6 +298,11 @@ namespace SpaceStationScramble {
                     }
                     break;
                 case ScreenContext.GAME_PLAY:
+                    if (titleMusicInstance.Volume > 0.01f) {
+                        titleMusicInstance.Volume *= 0.95f;
+                    } else {
+                        titleMusicInstance.Volume = 0;
+                    }
                     // Allows the game to exit
                     if (currentGamepadState.Buttons.Back == ButtonState.Pressed
                             || currentKeyboardState.IsKeyDown(Keys.Escape)) {
