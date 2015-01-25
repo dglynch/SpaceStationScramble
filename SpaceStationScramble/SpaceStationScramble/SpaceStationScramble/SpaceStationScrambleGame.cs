@@ -47,8 +47,8 @@ namespace SpaceStationScramble {
 
         SpriteFont font;
 
-        Vector2 playerOneMenuPosition = new Vector2(450, 280);
-        Vector2 playerTwoMenuPosition = new Vector2(450, 380);
+        Vector2 playerOneMenuPosition = new Vector2(475, 245);
+        Vector2 playerTwoMenuPosition = new Vector2(475, 365);
 
         Vector2 firstMainMenuPosition = new Vector2(517, 217);
         Vector2 secondMainMenuPosition = new Vector2(517, 334);
