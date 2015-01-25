@@ -77,10 +77,7 @@ namespace SpaceStationScramble {
         Texture2D hatchTexture;
         Texture2D pipeTexture;
         Texture2D tankTexture;
-<<<<<<< HEAD
         Texture2D circleTexture;
-=======
->>>>>>> Add images for exterior repair items
 
         EventGenerator eventGenerator;
         DisasterEvent nextEvent;
@@ -89,7 +86,6 @@ namespace SpaceStationScramble {
         private GasValve currentlyClosingValve;
         private double valveClosingEndTime;
 
-<<<<<<< HEAD
         SoundEffect valveTurn1;
         SoundEffect valveTurn2;
         SoundEffectInstance valve;
@@ -109,8 +105,6 @@ namespace SpaceStationScramble {
 
         int currentMusic;
 
-=======
->>>>>>> Add images for exterior repair items
         private readonly Vector2 northSatPos = new Vector2(580, 50);
         private readonly Vector2 northTankPos = new Vector2(690, 50);
         private readonly Vector2 northPipePos = new Vector2(580, 145);
@@ -199,10 +193,7 @@ namespace SpaceStationScramble {
             hatchTexture = Content.Load<Texture2D>("gfx/hatch");
             satelliteDishTexture = Content.Load<Texture2D>("gfx/satellite");
             pipeTexture = Content.Load<Texture2D>("gfx/SolarPanel");
-<<<<<<< HEAD
             circleTexture = Content.Load<Texture2D>("gfx/circle");
-=======
->>>>>>> Add images for exterior repair items
 
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
 
