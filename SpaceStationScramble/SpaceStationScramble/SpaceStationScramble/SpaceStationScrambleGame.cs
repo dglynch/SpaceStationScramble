@@ -233,7 +233,7 @@ namespace SpaceStationScramble {
             readyStartBackground = Content.Load<Texture2D>("gfx/ready-start");
 
 
-            playerOneBackground = Content.Load<Texture2D>("gfx/inside-rough");
+            playerOneBackground = Content.Load<Texture2D>("gfx/ShipIndoors");
             playerTwoBackground = Content.Load<Texture2D>("gfx/outside-rough");
 
             playerOneSprite = Content.Load<Texture2D>("gfx/player");
