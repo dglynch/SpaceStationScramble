@@ -71,7 +71,12 @@ namespace SpaceStationScramble {
 
         //Disaster event info
         //eww eww eww, gross, gross, gross
-        public static Texture2D steamTexture; 
+        public static Texture2D steamTexture;
+
+        Texture2D satelliteDishTexture;
+        Texture2D hatchTexture;
+        Texture2D pipeTexture;
+        Texture2D tankTexture;
 
         EventGenerator eventGenerator;
         DisasterEvent nextEvent;
@@ -87,7 +92,6 @@ namespace SpaceStationScramble {
 
         SoundEffect affirmativeFeedback;
         SoundEffect negativeFeedback;
-
         SoundEffect groanAndExplosion;
 
         SoundEffect titleMusic;
@@ -99,6 +103,31 @@ namespace SpaceStationScramble {
         SoundEffectInstance musicLoopInstance;
 
         int currentMusic;
+
+        private readonly Vector2 northSatPos = new Vector2(580, 50);
+        private readonly Vector2 northTankPos = new Vector2(690, 50);
+        private readonly Vector2 northPipePos = new Vector2(580, 145);
+        private readonly Vector2 northHatchPos = new Vector2(690, 145);
+
+        private readonly Vector2 southSatPos = new Vector2(580, 570);
+        private readonly Vector2 southTankPos = new Vector2(690, 570);
+        private readonly Vector2 southPipePos = new Vector2(580, 670);
+        private readonly Vector2 southHatchPos = new Vector2(690, 670);
+
+        private readonly Vector2 eastSatPos = new Vector2(870, 310);
+        private readonly Vector2 eastTankPos = new Vector2(1010, 310);
+        private readonly Vector2 eastPipePos = new Vector2(870, 425);
+        private readonly Vector2 eastHatchPos = new Vector2(1010, 425);
+
+        private readonly Vector2 westSatPos = new Vector2(270, 310);
+        private readonly Vector2 westTankPos = new Vector2(400, 310);
+        private readonly Vector2 westPipePos = new Vector2(270, 425);
+        private readonly Vector2 westHatchPos = new Vector2(400, 425);
+
+        private readonly Vector2 centerSatPos = new Vector2(580, 310);
+        private readonly Vector2 centerTankPos = new Vector2(580, 425);
+        private readonly Vector2 centerPipePos = new Vector2(690, 310);
+        private readonly Vector2 centerHatchPos = new Vector2(690, 425);
 
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
@@ -159,6 +188,10 @@ namespace SpaceStationScramble {
             playerTwoSprite = Content.Load<Texture2D>("gfx/player");
 
             steamTexture = Content.Load<Texture2D>("gfx/steam");
+            tankTexture = Content.Load<Texture2D>("gfx/O2Tank");
+            hatchTexture = Content.Load<Texture2D>("gfx/hatch");
+            satelliteDishTexture = Content.Load<Texture2D>("gfx/satellite");
+            pipeTexture = Content.Load<Texture2D>("gfx/SolarPanel");
 
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
 
@@ -801,6 +834,32 @@ namespace SpaceStationScramble {
                         spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
                     } else {
                         spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
+
+                        //Draw all the doodads on the outside of the ship
+                        spriteBatch.Draw(hatchTexture, northHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(hatchTexture, southHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(hatchTexture, eastHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(hatchTexture, westHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(hatchTexture, centerHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
+
+                        spriteBatch.Draw(tankTexture, northTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(tankTexture, southTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(tankTexture, eastTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(tankTexture, westTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(tankTexture, centerTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
+
+                        spriteBatch.Draw(pipeTexture, northPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(pipeTexture, southPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(pipeTexture, eastPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(pipeTexture, westPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(pipeTexture, centerPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
+
+
+                        spriteBatch.Draw(satelliteDishTexture, northSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(satelliteDishTexture, southSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(satelliteDishTexture, eastSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(satelliteDishTexture, westSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
+                        spriteBatch.Draw(satelliteDishTexture, centerSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
 
                         //Draw the player
                         spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
