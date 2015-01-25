@@ -525,6 +525,8 @@ namespace SpaceStationScramble {
                         if (currentlyClosingValve != GasValve.NONE && valveClosingEndTime < elapsedRoundTime) {
                             finishClosingGasValve(currentlyClosingValve);
                         }
+
+                        clearAlarm();
                     } else {
                         bool wasPlayerTwoMoving = isPlayerTwoMoving;
                         isPlayerTwoMoving = false;
@@ -598,6 +600,15 @@ namespace SpaceStationScramble {
             }
 
             base.Update(gameTime);
+        }
+
+        private void clearAlarm() {
+            foreach(DisasterEvent disaster in disasterEvents) {
+                if (disaster is RepairDisaster && sameLocation(playerOneState, disaster.Slot)) {
+                    disasterSounds[disaster].Volume = 0f;
+                    ((RepairDisaster) disaster).IsSilenced = true;
+                }
+            }
         }
 
         private void stopDisasterSounds() {
@@ -732,7 +743,7 @@ namespace SpaceStationScramble {
             foreach (var disaster in disasterEvents) {
                 if (disaster is GasLeakDisaster) {
                     GasLeakDisaster gld = (GasLeakDisaster)disaster;
-                    if (sameColor(gasValve, gld.SteamColor) && sameLocation(playerOneState, gld.Position)) {
+                    if (sameColor(gasValve, gld.SteamColor) && sameLocation(playerOneState, gld.Slot)) {
                         eventsToRemove.Add(disaster);
                     }
                 }
@@ -759,16 +770,16 @@ namespace SpaceStationScramble {
             }
         }
 
-        private bool sameLocation(PlayerOneState playerOneState, Vector2 position) {
-            if (playerOneState == PlayerOneState.AtCenter && position == insideNodePositions[SpaceStationSection.CENTER]) {
+        private bool sameLocation(PlayerOneState playerOneState, EventSlot slot) {
+            if (playerOneState == PlayerOneState.AtCenter && slot == EventSlot.Center) {
                 return true;
-            } else if (playerOneState == PlayerOneState.AtEast && position == insideNodePositions[SpaceStationSection.EAST]) {
+            } else if (playerOneState == PlayerOneState.AtEast && slot == EventSlot.East) {
                 return true;
-            } else if (playerOneState == PlayerOneState.AtNorth && position == insideNodePositions[SpaceStationSection.NORTH]) {
+            } else if (playerOneState == PlayerOneState.AtNorth && slot == EventSlot.North) {
                 return true;
-            } else if (playerOneState == PlayerOneState.AtSouth && position == insideNodePositions[SpaceStationSection.SOUTH]) {
+            } else if (playerOneState == PlayerOneState.AtSouth && slot == EventSlot.South) {
                 return true;
-            } else if (playerOneState == PlayerOneState.AtWest && position == insideNodePositions[SpaceStationSection.WEST]) {
+            } else if (playerOneState == PlayerOneState.AtWest && slot == EventSlot.West) {
                 return true;
             } else {
                 return false;

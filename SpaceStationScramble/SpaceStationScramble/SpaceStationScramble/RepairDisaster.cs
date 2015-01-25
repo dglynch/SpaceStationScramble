@@ -14,6 +14,8 @@ namespace SpaceStationScramble {
         private readonly Vector2 westDrawLoc = new Vector2(360, 360);
         private readonly Vector2 centerDrawLoc = new Vector2(640, 360);
 
+        public bool IsSilenced { get; set; }
+
         public StationPart StationPart {
             get;
             private set;
@@ -23,6 +25,7 @@ namespace SpaceStationScramble {
             base(slot, startTime, endTime) {
 
             StationPart = stationPart;
+            IsSilenced = false;
 
             switch (slot) {
                 case EventSlot.North:
@@ -44,10 +47,12 @@ namespace SpaceStationScramble {
         }
 
         public override void Draw(SpriteBatch spriteBatch) {
-            spriteBatch.Draw(SpaceStationScrambleGame.circleTexture, new Rectangle((int)Position.X - 64, (int)Position.Y - 64, 128, 128) , new Color(255, 2, 5, 125));
-            spriteBatch.Draw(SpaceStationScrambleGame.alarmTexture, Position
-                - new Vector2(SpaceStationScrambleGame.alarmTexture.Width / 2,
-                    SpaceStationScrambleGame.alarmTexture.Height / 2), Color.White);
+            if (!IsSilenced) {
+                spriteBatch.Draw(SpaceStationScrambleGame.circleTexture, new Rectangle((int)Position.X - 64, (int)Position.Y - 64, 128, 128), new Color(255, 2, 5, 125));
+                spriteBatch.Draw(SpaceStationScrambleGame.alarmTexture, Position
+                    - new Vector2(SpaceStationScrambleGame.alarmTexture.Width / 2,
+                        SpaceStationScrambleGame.alarmTexture.Height / 2), Color.White);
+            }
         }
 
         public override string ToString() {
