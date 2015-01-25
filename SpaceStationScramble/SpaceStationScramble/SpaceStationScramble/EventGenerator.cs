@@ -17,10 +17,10 @@ namespace SpaceStationScramble {
         public EventGenerator(Synchronizer syncronizer) {
             this.syncronizer = syncronizer;
             //Eventually these times will change as time goes on
-            minEventInterval = 2000;
-            maxEventInterval = 7000;
-            minDuration = 5000;
-            maxDuration = 7000;
+            minEventInterval = 12000;
+            maxEventInterval = 17000;
+            minDuration = 10000;
+            maxDuration = 17000;
 
             eventSlots = new Dictionary<EventSlot, long>();
             foreach(EventSlot slot in Enum.GetValues(typeof (EventSlot))) {
