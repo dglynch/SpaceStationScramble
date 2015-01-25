@@ -77,14 +77,14 @@ Credits
 --------------------------------------
 
 ### Programming
-Alexander Allin
-Dan Lynch
+- Alexander Allin
+- Dan Lynch
 
 ### Sound
-Sam Robinson
+- Sam Robinson
 
 ### Graphics
-Andrea Mele
+- Andrea Mele
 
 
 Copyright and Licence
