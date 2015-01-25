@@ -244,6 +244,9 @@ namespace SpaceStationScramble {
                         titleMusicInstance.Volume += 0.001f;
                         titleMusicInstance.Volume *= 1.05f;
                     }
+                    if (musicLoopInstance != null) {
+                        musicLoopInstance.Stop();
+                    }
                     if (isNewlyPressedUp()) {
                         if (currentMenuItem != MenuItem.NEW_GAME) {
                             currentMenuItem--;
