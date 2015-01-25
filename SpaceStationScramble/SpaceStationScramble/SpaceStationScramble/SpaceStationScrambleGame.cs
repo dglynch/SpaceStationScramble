@@ -739,7 +739,7 @@ namespace SpaceStationScramble {
 
             //initialize player two properties
             playerTwoMoveSpeed = 3.0f;
-            playerTwoPosition = new Vector2(960, 540);
+            playerTwoPosition = new Vector2(640, 360);
 
             disasterEvents = new List<DisasterEvent>();
             eventGenerator = new EventGenerator(synchronizer);
