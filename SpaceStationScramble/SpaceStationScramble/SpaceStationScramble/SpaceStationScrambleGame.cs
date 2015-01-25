@@ -41,6 +41,7 @@ namespace SpaceStationScramble {
         Texture2D readyStartBackground;
         Texture2D playerOneBackground;
         Texture2D playerTwoBackground;
+        Texture2D valvePanel;
 
         SpriteFont font;
 
@@ -75,6 +76,8 @@ namespace SpaceStationScramble {
         DisasterEvent nextEvent;
         List<DisasterEvent> disasterEvents;
         double elapsedRoundTime;
+        private GasValve currentlyClosingValve = GasValve.NONE;
+        private double valveClosingEndTime = Double.MaxValue;
 
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
@@ -148,6 +151,8 @@ namespace SpaceStationScramble {
             steamTexture = Content.Load<Texture2D>("gfx/steam");
 
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
+
+            valvePanel = Content.Load<Texture2D>("gfx/valve-panel");
         }
 
         /// <summary>
@@ -315,6 +320,28 @@ namespace SpaceStationScramble {
 
                         //Update player1 position
                         playerOnePosition += playerOneMoveStep;
+
+                        if (playerOneState == PlayerOneState.AtCenter
+                                || playerOneState == PlayerOneState.AtEast
+                                || playerOneState == PlayerOneState.AtNorth
+                                || playerOneState == PlayerOneState.AtSouth
+                                || playerOneState == PlayerOneState.AtWest) {
+                            if (currentGamepadState.IsButtonDown(Buttons.X) || currentKeyboardState.IsKeyDown(Keys.D1)) {
+                                beginClosingGasValve(GasValve.BLUE);
+                            } else if (currentGamepadState.IsButtonDown(Buttons.Y) || currentKeyboardState.IsKeyDown(Keys.D2)) {
+                                beginClosingGasValve(GasValve.YELLOW);
+                            } else if (currentGamepadState.IsButtonDown(Buttons.A) || currentKeyboardState.IsKeyDown(Keys.D3)) {
+                                beginClosingGasValve(GasValve.GREEN);
+                            } else if (currentGamepadState.IsButtonDown(Buttons.B) || currentKeyboardState.IsKeyDown(Keys.D4)) {
+                                beginClosingGasValve(GasValve.RED);
+                            }
+                        } else {
+                            stopClosingValve();
+                        }
+
+                        if (currentlyClosingValve != GasValve.NONE && valveClosingEndTime < elapsedRoundTime) {
+                            finishClosingGasValve(currentlyClosingValve);
+                        }
                     } else {
                         if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
                             playerTwoPosition.Y -= playerTwoMoveSpeed;
@@ -333,6 +360,22 @@ namespace SpaceStationScramble {
             }
 
             base.Update(gameTime);
+        }
+
+        private void beginClosingGasValve(GasValve gasValve) {
+            if (currentlyClosingValve != gasValve) {
+                currentlyClosingValve = gasValve;
+                valveClosingEndTime = elapsedRoundTime + 2000;
+            }
+        }
+
+        private void stopClosingValve() {
+            currentlyClosingValve = GasValve.NONE;
+            valveClosingEndTime = Double.MaxValue;
+        }
+        private void finishClosingGasValve(GasValve gasValve) {
+            currentlyClosingValve = GasValve.NONE;
+            valveClosingEndTime = Double.MaxValue;
         }
 
         private string getTypedCharacter() {
@@ -545,6 +588,55 @@ namespace SpaceStationScramble {
                         spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.WEST], Color.Green);
                         spriteBatch.Draw(playerOneSprite, insideNodePositions[SpaceStationSection.CENTER], Color.Green);
 
+                        Vector2 centreValves = new Vector2(740, 470);
+                        Vector2 eastValves = new Vector2(1100, 360);
+                        Vector2 northValves = new Vector2(740, 20);
+                        Vector2 southValves = new Vector2(740, 650);
+                        Vector2 westValves = new Vector2(130, 360);
+                        Vector2 offScreenValves = new Vector2(-1000, -1000);
+
+                        Vector2 currentValves;
+
+                        switch(playerOneState) {
+                            case PlayerOneState.AtCenter:
+                                currentValves = centreValves;
+                                break;
+                            case PlayerOneState.AtEast:
+                                currentValves = eastValves;
+                                break;
+                            case PlayerOneState.AtNorth:
+                                currentValves = northValves;
+                                break;
+                            case PlayerOneState.AtSouth:
+                                currentValves = southValves;
+                                break;
+                            case PlayerOneState.AtWest:
+                                currentValves = westValves;
+                                break;
+                            default:
+                                currentValves = offScreenValves;
+                                break;
+                        }
+                        spriteBatch.Draw(valvePanel, currentValves, Color.White);
+
+                        float rotation = (float) (gameTime.TotalGameTime.TotalMilliseconds % 500 * 2 * Math.PI / 500);
+                        switch (currentlyClosingValve) {
+                            case GasValve.NONE:
+                                break;
+                            case GasValve.BLUE:
+                                spriteBatch.DrawString(font, "O", new Vector2(currentValves.X + 19, currentValves.Y + 34), Color.White, rotation, Vector2.Zero, 0.25f, SpriteEffects.None, 0f);
+                                break;
+                            case GasValve.YELLOW:
+                                spriteBatch.DrawString(font, "O", new Vector2(currentValves.X + 34, currentValves.Y + 19), Color.White, rotation, Vector2.Zero, 0.25f, SpriteEffects.None, 0f);
+                                break;
+                            case GasValve.GREEN:
+                                spriteBatch.DrawString(font, "O", new Vector2(currentValves.X + 36, currentValves.Y + 52), Color.White, rotation, Vector2.Zero, 0.25f, SpriteEffects.None, 0f);
+                                break;
+                            case GasValve.RED:
+                                spriteBatch.DrawString(font, "O", new Vector2(currentValves.X + 52, currentValves.Y + 34), Color.White, rotation, Vector2.Zero, 0.25f, SpriteEffects.None, 0f);
+                                break;
+                        }
+
                         //Draw the player
                         spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
                     } else {
@@ -651,5 +743,13 @@ namespace SpaceStationScramble {
         INSTRUCTIONS,
         CREDITS,
         EXIT
+    }
+
+    public enum GasValve {
+        NONE,
+        BLUE,
+        YELLOW,
+        GREEN,
+        RED
     }
 }
