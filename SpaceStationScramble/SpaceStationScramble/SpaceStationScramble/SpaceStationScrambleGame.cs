@@ -118,6 +118,8 @@ namespace SpaceStationScramble {
         SoundEffect jetSound4;
         SoundEffectInstance jetSoundInstance;
 
+        SoundEffect alarmSound;
+
         int currentMusic;
 
         bool isPlayerTwoMoving = false;
@@ -248,6 +250,8 @@ namespace SpaceStationScramble {
             jetSound2 = Content.Load<SoundEffect>("sound/Jet Sound 8");
             jetSound3 = Content.Load<SoundEffect>("sound/Jet Sound 9");
             jetSound4 = Content.Load<SoundEffect>("sound/Jet Sound 10");
+
+            alarmSound = Content.Load<SoundEffect>("sound/Alarm 1");
         }
 
         /// <summary>
@@ -561,8 +565,7 @@ namespace SpaceStationScramble {
                         return gasLeakSound3.CreateInstance();
                 }
             } else {
-                // TODO: repair disaster type goes here (i.e. alarm sound)
-                return negativeFeedback.CreateInstance();
+                return alarmSound.CreateInstance();
             }
         }
 
