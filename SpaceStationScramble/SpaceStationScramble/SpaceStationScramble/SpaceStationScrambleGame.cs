@@ -204,7 +204,7 @@ namespace SpaceStationScramble {
             instructions = Content.Load<Texture2D>("gfx/instructions");
             credits = Content.Load<Texture2D>("gfx/credits");
             characterSelectionBackground = Content.Load<Texture2D>("gfx/character-selection");
-            menuSelector = Content.Load<Texture2D>("gfx/player");
+            menuSelector = Content.Load<Texture2D>("gfx/MenuSelect_01");
 
             keyCodeBackground = Content.Load<Texture2D>("gfx/key-code-background");
             readyStartBackground = Content.Load<Texture2D>("gfx/ready-start");
