@@ -1117,7 +1117,8 @@ namespace SpaceStationScramble {
                         }
 
                         //Draw the player
-                        spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
+                        spriteBatch.Draw(playerOneSprite, new Vector2 (playerOnePosition.X - playerOneSprite.Width /2,
+                            playerOnePosition.Y - playerOneSprite.Height /2), Color.White);
 
                         foreach (DisasterEvent theEvent in disasterEvents) {
                             if (theEvent is RepairDisaster) {
@@ -1150,7 +1151,8 @@ namespace SpaceStationScramble {
                         }
 
                         //Draw the player
-                        spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
+                        spriteBatch.Draw(playerTwoSprite, new Vector2(playerTwoPosition.X - playerTwoSprite.Width / 2,
+                            playerTwoPosition.Y - playerTwoSprite.Height / 2), Color.White);
 
                         //Draw the repair icons if close to the items to repair
                         drawRepairIcon(spriteBatch);
