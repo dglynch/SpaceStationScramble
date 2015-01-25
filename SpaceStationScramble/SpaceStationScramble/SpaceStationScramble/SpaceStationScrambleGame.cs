@@ -130,30 +130,30 @@ namespace SpaceStationScramble {
         private IDictionary<DisasterEvent, SoundEffectInstance> disasterSounds = new Dictionary<DisasterEvent, SoundEffectInstance>();
 
 
-        private readonly Vector2 northSatPos = new Vector2(580, 50);
-        private readonly Vector2 northTankPos = new Vector2(690, 50);
-        private readonly Vector2 northPipePos = new Vector2(580, 145);
-        private readonly Vector2 northHatchPos = new Vector2(690, 145);
+        private readonly Vector2 northSatPos = new Vector2(590, 200);
+        private readonly Vector2 northTankPos = new Vector2(690, 200);
+        private readonly Vector2 northPipePos = new Vector2(590, 300);
+        private readonly Vector2 northHatchPos = new Vector2(690, 300);
 
-        private readonly Vector2 southSatPos = new Vector2(580, 570);
-        private readonly Vector2 southTankPos = new Vector2(690, 570);
-        private readonly Vector2 southPipePos = new Vector2(580, 670);
-        private readonly Vector2 southHatchPos = new Vector2(690, 670);
+        private readonly Vector2 southSatPos = new Vector2(590, 550);
+        private readonly Vector2 southTankPos = new Vector2(690, 550);
+        private readonly Vector2 southPipePos = new Vector2(590, 660);
+        private readonly Vector2 southHatchPos = new Vector2(690, 660);
 
-        private readonly Vector2 eastSatPos = new Vector2(870, 310);
-        private readonly Vector2 eastTankPos = new Vector2(1010, 310);
-        private readonly Vector2 eastPipePos = new Vector2(870, 425);
-        private readonly Vector2 eastHatchPos = new Vector2(1010, 425);
+        private readonly Vector2 eastSatPos = new Vector2(1090, 420);
+        private readonly Vector2 eastTankPos = new Vector2(1000, 420);
+        private readonly Vector2 eastPipePos = new Vector2(870, 380);
+        private readonly Vector2 eastHatchPos = new Vector2(870, 445);
 
-        private readonly Vector2 westSatPos = new Vector2(270, 310);
-        private readonly Vector2 westTankPos = new Vector2(400, 310);
-        private readonly Vector2 westPipePos = new Vector2(270, 425);
-        private readonly Vector2 westHatchPos = new Vector2(400, 425);
+        private readonly Vector2 westSatPos = new Vector2(200, 420);
+        private readonly Vector2 westTankPos = new Vector2(290, 420);
+        private readonly Vector2 westPipePos = new Vector2(400, 380);
+        private readonly Vector2 westHatchPos = new Vector2(400, 445);
 
-        private readonly Vector2 centerSatPos = new Vector2(580, 310);
-        private readonly Vector2 centerTankPos = new Vector2(580, 425);
-        private readonly Vector2 centerPipePos = new Vector2(690, 310);
-        private readonly Vector2 centerHatchPos = new Vector2(690, 425);
+        private readonly Vector2 centerSatPos = new Vector2(590, 390);
+        private readonly Vector2 centerTankPos = new Vector2(680, 450);
+        private readonly Vector2 centerPipePos = new Vector2(590, 450);
+        private readonly Vector2 centerHatchPos = new Vector2(680, 390);
 
         private List<RepairPart> repairableParts;
         private RepairPart currentRepairPart;
