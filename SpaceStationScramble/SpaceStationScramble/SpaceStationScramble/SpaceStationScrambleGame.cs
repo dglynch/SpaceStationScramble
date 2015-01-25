@@ -88,6 +88,8 @@ namespace SpaceStationScramble {
         SoundEffect affirmativeFeedback;
         SoundEffect negativeFeedback;
 
+        SoundEffect groanAndExplosion;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -157,6 +159,8 @@ namespace SpaceStationScramble {
 
             affirmativeFeedback = Content.Load<SoundEffect>("sound/Affirmative FB");
             negativeFeedback = Content.Load<SoundEffect>("sound/Negative FB");
+
+            groanAndExplosion = Content.Load<SoundEffect>("sound/Ship Groan and Explosion 1");
         }
 
         /// <summary>
@@ -292,6 +296,7 @@ namespace SpaceStationScramble {
                             eventsToRemove.Add(theEvent);
                             if (theEvent.VisibleToPlayer != currentPlayer) {
                                 deathTime = gameTime.TotalGameTime;
+                                groanAndExplosion.Play();
                                 context = ScreenContext.DEATH;
                             }
                         } else {
