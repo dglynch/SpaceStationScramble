@@ -12,6 +12,8 @@ namespace SpaceStationScramble {
         private readonly Vector2 eastDrawLoc = new Vector2(980, 360);
         private readonly Vector2 westDrawLoc = new Vector2(300, 360);
 
+        private EventSlot eventSlot;
+
         public SteamColor SteamColor {
             get;
             private set;
@@ -22,6 +24,7 @@ namespace SpaceStationScramble {
 
             VisibleToPlayer = PlayerNumber.TWO;
             SteamColor = steamColor;
+            eventSlot = slot;
 
             switch (slot) {
                 case EventSlot.North:
@@ -53,6 +56,10 @@ namespace SpaceStationScramble {
                     spriteBatch.Draw(SpaceStationScrambleGame.steamTexture, Position, Color.Yellow);
                     break;
             }
+        }
+
+        public override string ToString() {
+            return "Gas Leak - " + eventSlot + " - " + SteamColor;
         }
     }
     public enum SteamColor {

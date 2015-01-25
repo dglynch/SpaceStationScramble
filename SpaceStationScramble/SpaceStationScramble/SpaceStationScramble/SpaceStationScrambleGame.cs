@@ -665,7 +665,7 @@ namespace SpaceStationScramble {
                             disaster.Draw(spriteBatch);
                         }
                         if (Cheater.CheatsOn) {
-                            spriteBatch.DrawString(font, "Event [" + disasterEvents.IndexOf(disaster) + "] time left: "
+                            spriteBatch.DrawString(font, "Event [" + disaster + "] time left: "
                                 + (int)((disaster.EndTime - elapsedRoundTime) / 1000),
                                 new Vector2(20, 50 + (disasterEvents.IndexOf(disaster) * 14)), Color.Red, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
                         }
