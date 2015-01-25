@@ -77,6 +77,7 @@ namespace SpaceStationScramble {
         Texture2D hatchTexture;
         Texture2D pipeTexture;
         Texture2D tankTexture;
+        Texture2D circleTexture;
 
         EventGenerator eventGenerator;
         DisasterEvent nextEvent;
@@ -192,6 +193,7 @@ namespace SpaceStationScramble {
             hatchTexture = Content.Load<Texture2D>("gfx/hatch");
             satelliteDishTexture = Content.Load<Texture2D>("gfx/satellite");
             pipeTexture = Content.Load<Texture2D>("gfx/SolarPanel");
+            circleTexture = Content.Load<Texture2D>("gfx/circle");
 
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
 
@@ -863,6 +865,9 @@ namespace SpaceStationScramble {
 
                         //Draw the player
                         spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
+
+                        //Draw the repair icons if close to the items to repair
+                        drawRepairIcon(spriteBatch);
                     }
                     TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int) elapsedRoundTime);
                     spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", timeSpan.Minutes, timeSpan.Seconds), new Vector2(10, 10), Color.White);
@@ -887,6 +892,54 @@ namespace SpaceStationScramble {
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void drawRepairIcon(SpriteBatch spriteBatch) {
+            //Whole lot of collision to check here
+            float repairRadius = 16.0f;
+            Vector2 repairIconOffset = new Vector2(-32, -32);
+
+            if (Vector2.Distance(playerTwoPosition, northHatchPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, northHatchPos + repairIconOffset, Color.Red);
+            } else if (Vector2.Distance(playerTwoPosition, southHatchPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, southHatchPos + repairIconOffset, Color.Red);
+            } else if (Vector2.Distance(playerTwoPosition, eastHatchPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, eastHatchPos + repairIconOffset, Color.Red);
+            } else if (Vector2.Distance(playerTwoPosition, westHatchPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, westHatchPos + repairIconOffset, Color.Red);
+            } else if (Vector2.Distance(playerTwoPosition, centerHatchPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, centerHatchPos + repairIconOffset, Color.Red);
+            } if (Vector2.Distance(playerTwoPosition, northTankPos) < repairRadius) { //Tanks
+                spriteBatch.Draw(circleTexture, northTankPos + repairIconOffset, Color.Blue);
+            } else if (Vector2.Distance(playerTwoPosition, southTankPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, southTankPos + repairIconOffset, Color.Blue);
+            } else if (Vector2.Distance(playerTwoPosition, eastTankPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, eastTankPos + repairIconOffset, Color.Blue);
+            } else if (Vector2.Distance(playerTwoPosition, westTankPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, westTankPos + repairIconOffset, Color.Blue);
+            } else if (Vector2.Distance(playerTwoPosition, centerTankPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, centerTankPos + repairIconOffset, Color.Blue);
+            }  else if (Vector2.Distance(playerTwoPosition, northSatPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, northSatPos + repairIconOffset, Color.Yellow);
+            } else if (Vector2.Distance(playerTwoPosition, southSatPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, southSatPos + repairIconOffset, Color.Yellow);
+            } else if (Vector2.Distance(playerTwoPosition, eastSatPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, eastSatPos + repairIconOffset, Color.Yellow);
+            } else if (Vector2.Distance(playerTwoPosition, westSatPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, westSatPos + repairIconOffset, Color.Yellow);
+            } else if (Vector2.Distance(playerTwoPosition, centerSatPos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, centerSatPos + repairIconOffset, Color.Yellow);
+            } else if (Vector2.Distance(playerTwoPosition, northPipePos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, northPipePos + repairIconOffset, Color.Green);
+            } else if (Vector2.Distance(playerTwoPosition, southPipePos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, southPipePos + repairIconOffset, Color.Green);
+            } else if (Vector2.Distance(playerTwoPosition, eastPipePos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, eastPipePos + repairIconOffset, Color.Green);
+            } else if (Vector2.Distance(playerTwoPosition, westPipePos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, westPipePos + repairIconOffset, Color.Green);
+            } else if (Vector2.Distance(playerTwoPosition, centerPipePos) < repairRadius) {
+                spriteBatch.Draw(circleTexture, centerPipePos + repairIconOffset, Color.Green);
+            }
         }
 
         private bool isNewlyPressedUp() {
