@@ -23,10 +23,10 @@ namespace SpaceStationScramble {
         public EventGenerator(Synchronizer synchronizer) {
             this.synchronizer = synchronizer;
             //Eventually these times will change as time goes on
-            minEventInterval = 6000;
-            maxEventInterval = 10000;
-            minDuration = 10000;
-            maxDuration = 14000;
+            minEventInterval = 8000;
+            maxEventInterval = 12000;
+            minDuration = 15000;
+            maxDuration = 20000;
             lastP1EventStarted = 0;
             lastP2EventStarted = 0;
             lastPlayer = 0;
