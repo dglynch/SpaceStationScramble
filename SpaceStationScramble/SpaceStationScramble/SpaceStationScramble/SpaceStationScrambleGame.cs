@@ -37,7 +37,7 @@ namespace SpaceStationScramble {
         Texture2D instructions;
         Texture2D credits;
         Texture2D characterSelectionBackground;
-        Texture2D menuSelector;
+        Texture2D[] menuSelector;
         Texture2D keyCodeBackground;
         Texture2D readyStartBackground;
         Texture2D playerOneBackground;
@@ -49,8 +49,11 @@ namespace SpaceStationScramble {
 
         Vector2 playerOneMenuPosition = new Vector2(450, 280);
         Vector2 playerTwoMenuPosition = new Vector2(450, 380);
-        Vector2 playerThreeMenuPosition = new Vector2(450, 480);
-        Vector2 playerFourMenuPosition = new Vector2(450, 580);
+
+        Vector2 firstMainMenuPosition = new Vector2(517, 217);
+        Vector2 secondMainMenuPosition = new Vector2(517, 334);
+        Vector2 thirdMainMenuPosition = new Vector2(517, 453);
+        Vector2 fourthMainMenuPosition = new Vector2(517, 570);
 
         //Station info
         Dictionary<SpaceStationSection, Vector2> insideNodePositions;
@@ -204,7 +207,11 @@ namespace SpaceStationScramble {
             instructions = Content.Load<Texture2D>("gfx/instructions");
             credits = Content.Load<Texture2D>("gfx/credits");
             characterSelectionBackground = Content.Load<Texture2D>("gfx/character-selection");
-            menuSelector = Content.Load<Texture2D>("gfx/MenuSelect_01");
+            menuSelector = new Texture2D[4];
+            menuSelector[0] = Content.Load<Texture2D>("gfx/MenuSelect_01");
+            menuSelector[1] = Content.Load<Texture2D>("gfx/MenuSelect_02");
+            menuSelector[2] = Content.Load<Texture2D>("gfx/MenuSelect_04");
+            menuSelector[3] = Content.Load<Texture2D>("gfx/MenuSelect_02");
 
             keyCodeBackground = Content.Load<Texture2D>("gfx/key-code-background");
             readyStartBackground = Content.Load<Texture2D>("gfx/ready-start");
@@ -980,22 +987,23 @@ namespace SpaceStationScramble {
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+            int frame = (int)(gameTime.TotalGameTime.TotalMilliseconds / 125) % 4;
 
             switch (context) {
                 case ScreenContext.TITLE_SCREEN_MENU:
                     spriteBatch.Draw(titleScreenMenu, Vector2.Zero, Color.White);
                     switch (currentMenuItem) {
                         case MenuItem.NEW_GAME:
-                            spriteBatch.Draw(menuSelector, playerOneMenuPosition, Color.White);
+                            spriteBatch.Draw(menuSelector[frame], firstMainMenuPosition, Color.White);
                             break;
                         case MenuItem.INSTRUCTIONS:
-                            spriteBatch.Draw(menuSelector, playerTwoMenuPosition, Color.White);
+                            spriteBatch.Draw(menuSelector[frame], secondMainMenuPosition, Color.White);
                             break;
                         case MenuItem.CREDITS:
-                            spriteBatch.Draw(menuSelector, playerThreeMenuPosition, Color.White);
+                            spriteBatch.Draw(menuSelector[frame], thirdMainMenuPosition, Color.White);
                             break;
                         case MenuItem.EXIT:
-                            spriteBatch.Draw(menuSelector, playerFourMenuPosition, Color.White);
+                            spriteBatch.Draw(menuSelector[frame], fourthMainMenuPosition, Color.White);
                             break;
                     }
                     break;
@@ -1008,9 +1016,9 @@ namespace SpaceStationScramble {
                 case ScreenContext.CHARACTER_SELECTION:
                     spriteBatch.Draw(characterSelectionBackground, Vector2.Zero, Color.White);
                     if (currentPlayer == PlayerNumber.ONE) {
-                        spriteBatch.Draw(menuSelector, playerOneMenuPosition, Color.White);
+                        spriteBatch.Draw(menuSelector[frame], playerOneMenuPosition, Color.White);
                     } else {
-                        spriteBatch.Draw(menuSelector, playerTwoMenuPosition, Color.White);
+                        spriteBatch.Draw(menuSelector[frame], playerTwoMenuPosition, Color.White);
                     }
                     break;
                 case ScreenContext.KEY_CODE:
