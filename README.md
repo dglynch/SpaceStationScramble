@@ -51,21 +51,21 @@ Technology Notes
 
 We used the following technologies and tools, in various ways, to develop this software:
 
-Visual Studio 2013
-Microsoft XNA Game Studio 4.0
-.NET Framework
-ProTools 10
-Ableton Live 8
-3ds Max 2014
-Zbrush
-Photoshop
-Microsoft Windows Paint
-GraphicsGale
-Diceware
-Git
-Gitolite
-Pivotal Tracker
-Google Drive
+- Visual Studio 2013
+- Microsoft XNA Game Studio 4.0
+- .NET Framework
+- ProTools 10
+- Ableton Live 8
+- 3ds Max 2014
+- Zbrush
+- Photoshop
+- Microsoft Windows Paint
+- GraphicsGale
+- Diceware
+- Git
+- Gitolite
+- Pivotal Tracker
+- Google Drive
 
 
 Build Instructions
@@ -92,4 +92,5 @@ Copyright and Licence
 
 Except as noted below, this work is Copyright © 2015 by Alex Allin, Dan Lynch, Sam Robinson, and Andrea Mele. It is licensed under the Creative Commons Attribution-Noncommercial-Share Alike 3.0 licence.
 
-["Milkyway" by Blochi](http://www.hdrlabs.com/sibl/archive.html) under CC BY-NC-SA 3.0
+- ["Milkyway" by Blochi](http://www.hdrlabs.com/sibl/archive.html) under CC BY-NC-SA 3.0
+- Hubble space telescope images from NASA
