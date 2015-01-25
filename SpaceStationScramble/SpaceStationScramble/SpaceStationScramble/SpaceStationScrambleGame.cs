@@ -88,10 +88,7 @@ namespace SpaceStationScramble {
         private GasValve currentlyClosingValve;
         private double valveClosingEndTime;
 
-        private bool repairing;
         private double repairEndTime;
-        private EventSlot repairLocation;
-        private StationPart repairPart;
 
         SoundEffect valveTurn1;
         SoundEffect valveTurn2;
@@ -1166,7 +1163,13 @@ namespace SpaceStationScramble {
 
             foreach (RepairPart part in repairableParts) {
                 if (Vector2.Distance(playerTwoPosition, part.Position) < repairRadius) {
-                    spriteBatch.Draw(circleTexture, part.Position + repairIconOffset, part.TintColor);
+                    if (part.Active) {
+                        float rotation = (float)((elapsedRoundTime - repairEndTime)) / 1000;
+                        spriteBatch.Draw(circleTexture, part.Position + repairIconOffset, circleTexture.Bounds, part.TintColor,
+                            rotation, new Vector2(circleTexture.Width / 2, circleTexture.Height / 2), 1.0f, SpriteEffects.None, 1.0f);
+                    } else {
+                        spriteBatch.Draw(circleTexture, part.Position + repairIconOffset, part.TintColor);
+                    }
                 }
             };
         }
