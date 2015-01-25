@@ -1,6 +1,14 @@
 Visual Studio 2013
 Microsoft XNA Game Studio 4.0
 .NET Framework
+ProTools 10
+Ableton Live 8
+3DS max 2014
+Zbrush
+Photoshop
+Microsoft Windows Paint
+GraphicsGale
 Git
 Gitolite
 Pivotal Tracker
+Google Drive
