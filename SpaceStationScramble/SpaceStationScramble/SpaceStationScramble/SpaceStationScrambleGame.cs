@@ -1024,11 +1024,11 @@ namespace SpaceStationScramble {
                 case ScreenContext.KEY_CODE:
                     spriteBatch.Draw(keyCodeBackground, Vector2.Zero, Color.White);
                     if (currentPlayer == PlayerNumber.ONE) {
-                        spriteBatch.DrawString(font, keyCode, new Vector2(640 - font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
+                        spriteBatch.DrawString(font, keyCode, new Vector2(685 - font.MeasureString(keyCode).X / 2, 210), Color.Yellow);
                     } else {
-                        spriteBatch.DrawString(font, keyCode, new Vector2(640 - font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
+                        spriteBatch.DrawString(font, keyCode, new Vector2(685 - font.MeasureString(keyCode).X / 2, 210), Color.Yellow);
                         if (gameTime.TotalGameTime.TotalMilliseconds % 1000 > 500) {
-                            spriteBatch.DrawString(font, "_", new Vector2(640 + font.MeasureString(keyCode).X / 2, 360), Color.Yellow);
+                            spriteBatch.DrawString(font, "_", new Vector2(685 + font.MeasureString(keyCode).X / 2, 210), Color.Yellow);
                         }
                         if (Cheater.CheatsOn) {
                             spriteBatch.DrawString(font, "GadgetKeyDustChild", new Vector2(20, 20), Color.Yellow, 0f, Vector2.Zero, 0.5f, SpriteEffects.None, 0f);
