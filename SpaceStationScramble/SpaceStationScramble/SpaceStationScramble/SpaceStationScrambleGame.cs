@@ -76,8 +76,8 @@ namespace SpaceStationScramble {
         DisasterEvent nextEvent;
         List<DisasterEvent> disasterEvents;
         double elapsedRoundTime;
-        private GasValve currentlyClosingValve = GasValve.NONE;
-        private double valveClosingEndTime = Double.MaxValue;
+        private GasValve currentlyClosingValve;
+        private double valveClosingEndTime;
 
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
@@ -109,17 +109,6 @@ namespace SpaceStationScramble {
             insideNodePositions.Add(SpaceStationSection.SOUTH, new Vector2(640, 660));
             insideNodePositions.Add(SpaceStationSection.EAST, new Vector2(980, 360));
             insideNodePositions.Add(SpaceStationSection.WEST, new Vector2(300, 360));
-
-            //initialize player one properties
-            playerOneMoveSpeed = 3.0f;
-            playerOneMoveStep = Vector2.Zero;
-
-            playerOnePosition = insideNodePositions[SpaceStationSection.CENTER];
-            playerOneState = PlayerOneState.AtCenter;
-
-            //initialize player two properties
-            playerTwoMoveSpeed = 3.0f;
-            playerTwoPosition = new Vector2(960, 540);
 
             base.Initialize();
         }
@@ -260,10 +249,7 @@ namespace SpaceStationScramble {
                     break;
                 case ScreenContext.READY_TO_START:
                     if (isNewlyPressedStart()) {
-                        disasterEvents = new List<DisasterEvent>();
-                        eventGenerator = new EventGenerator(synchronizer);
-                        elapsedRoundTime = 0;
-                        nextEvent = eventGenerator.NextEvent();
+                        setInitialGameState();
                         context = ScreenContext.GAME_PLAY;
                     }
                     if (isNewlyPressedBack()) {
@@ -360,6 +346,27 @@ namespace SpaceStationScramble {
             }
 
             base.Update(gameTime);
+        }
+
+        private void setInitialGameState() {
+            currentlyClosingValve = GasValve.NONE;
+            valveClosingEndTime = Double.MaxValue;
+
+            //initialize player one properties
+            playerOneMoveSpeed = 3.0f;
+            playerOneMoveStep = Vector2.Zero;
+
+            playerOnePosition = insideNodePositions[SpaceStationSection.CENTER];
+            playerOneState = PlayerOneState.AtCenter;
+
+            //initialize player two properties
+            playerTwoMoveSpeed = 3.0f;
+            playerTwoPosition = new Vector2(960, 540);
+
+            disasterEvents = new List<DisasterEvent>();
+            eventGenerator = new EventGenerator(synchronizer);
+            elapsedRoundTime = 0;
+            nextEvent = eventGenerator.NextEvent();
         }
 
         private void beginClosingGasValve(GasValve gasValve) {
