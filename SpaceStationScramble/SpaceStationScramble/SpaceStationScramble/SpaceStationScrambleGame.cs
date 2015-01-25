@@ -351,7 +351,6 @@ namespace SpaceStationScramble {
                     }
                     if (isNewlyPressedBack()) {
                         context = ScreenContext.TITLE_SCREEN_MENU;
-                        stopDisasterSounds();
                     }
                     break;
                 case ScreenContext.KEY_CODE:
@@ -408,6 +407,7 @@ namespace SpaceStationScramble {
                     if (currentGamepadState.Buttons.Back == ButtonState.Pressed
                             || currentKeyboardState.IsKeyDown(Keys.Escape)) {
                         context = ScreenContext.TITLE_SCREEN_MENU;
+                        stopDisasterSounds();
                     }
 
                     elapsedRoundTime += gameTime.ElapsedGameTime.TotalMilliseconds;
