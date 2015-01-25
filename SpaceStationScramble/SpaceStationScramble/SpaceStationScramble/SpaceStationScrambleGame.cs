@@ -112,7 +112,15 @@ namespace SpaceStationScramble {
         SoundEffect selectorMove;
         SoundEffect selectorClick;
 
+        SoundEffect jetSound1;
+        SoundEffect jetSound2;
+        SoundEffect jetSound3;
+        SoundEffect jetSound4;
+        SoundEffectInstance jetSoundInstance;
+
         int currentMusic;
+
+        bool isPlayerTwoMoving = false;
 
         private IDictionary<DisasterEvent, SoundEffectInstance> disasterSounds = new Dictionary<DisasterEvent, SoundEffectInstance>();
 
@@ -235,6 +243,11 @@ namespace SpaceStationScramble {
 
             selectorMove = Content.Load<SoundEffect>("sound/Start Screen Selector 1");
             selectorClick = Content.Load<SoundEffect>("sound/Start Screen Selection 1");
+
+            jetSound1 = Content.Load<SoundEffect>("sound/Jet Sound 7 loong w pitch_07");
+            jetSound2 = Content.Load<SoundEffect>("sound/Jet Sound 8");
+            jetSound3 = Content.Load<SoundEffect>("sound/Jet Sound 9");
+            jetSound4 = Content.Load<SoundEffect>("sound/Jet Sound 10");
         }
 
         /// <summary>
@@ -264,6 +277,9 @@ namespace SpaceStationScramble {
                     }
                     if (musicLoopInstance != null) {
                         musicLoopInstance.Stop();
+                    }
+                    if (jetSoundInstance != null) {
+                        jetSoundInstance.Stop();
                     }
                     if (isNewlyPressedUp()) {
                         if (currentMenuItem != MenuItem.NEW_GAME) {
@@ -300,6 +316,9 @@ namespace SpaceStationScramble {
                 case ScreenContext.DEATH:
                     if (musicLoopInstance != null) {
                         musicLoopInstance.Stop();
+                    }
+                    if (jetSoundInstance != null) {
+                        jetSoundInstance.Stop();
                     }
                     if (titleMusicInstance.Volume * 1.05f < 1) {
                         titleMusicInstance.Volume += 0.001f;
@@ -468,23 +487,54 @@ namespace SpaceStationScramble {
                             finishClosingGasValve(currentlyClosingValve);
                         }
                     } else {
+                        bool wasPlayerTwoMoving = isPlayerTwoMoving;
+                        isPlayerTwoMoving = false;
                         if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
                             playerTwoPosition.Y -= playerTwoMoveSpeed;
+                            isPlayerTwoMoving = true;
                         }
                         if (currentGamepadState.IsButtonDown(Buttons.DPadDown) || currentKeyboardState.IsKeyDown(Keys.Down) || currentKeyboardState.IsKeyDown(Keys.S)) {
                             playerTwoPosition.Y += playerTwoMoveSpeed;
+                            isPlayerTwoMoving = true;
                         }
                         if (currentGamepadState.IsButtonDown(Buttons.DPadRight) || currentKeyboardState.IsKeyDown(Keys.Right) || currentKeyboardState.IsKeyDown(Keys.D)) {
                             playerTwoPosition.X += playerTwoMoveSpeed;
+                            isPlayerTwoMoving = true;
                         }
                         if (currentGamepadState.IsButtonDown(Buttons.DPadLeft) || currentKeyboardState.IsKeyDown(Keys.Left) || currentKeyboardState.IsKeyDown(Keys.A)) {
                             playerTwoPosition.X -= playerTwoMoveSpeed;
+                            isPlayerTwoMoving = true;
+                        }
+                        if (isPlayerTwoMoving && !wasPlayerTwoMoving) {
+                            if (jetSoundInstance != null) {
+                                jetSoundInstance.Stop();
+                            }
+                            jetSoundInstance = getNextJetSoundInstance();
+                            jetSoundInstance.Play();
+                        } else if (!isPlayerTwoMoving && wasPlayerTwoMoving) {
+                            jetSoundInstance.Stop();
                         }
                     }
                     break;
             }
 
             base.Update(gameTime);
+        }
+
+        private int jetSoundRotator = 0;
+
+        private SoundEffectInstance getNextJetSoundInstance() {
+            jetSoundRotator++;
+            switch (jetSoundRotator % 4) {
+                case 0:
+                    return jetSound1.CreateInstance();
+                case 1:
+                    return jetSound2.CreateInstance();
+                case 2:
+                    return jetSound3.CreateInstance();
+                default:
+                    return jetSound4.CreateInstance();
+            }
         }
 
         private int gasLeakSoundRotator = 0;
