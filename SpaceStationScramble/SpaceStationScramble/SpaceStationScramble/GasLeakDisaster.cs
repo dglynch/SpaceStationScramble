@@ -11,6 +11,7 @@ namespace SpaceStationScramble {
         private readonly Vector2 southDrawLoc = new Vector2(640, 660);
         private readonly Vector2 eastDrawLoc = new Vector2(980, 360);
         private readonly Vector2 westDrawLoc = new Vector2(300, 360);
+        private readonly Vector2 centerDrawLoc = new Vector2(640, 360);
 
         private EventSlot eventSlot;
 
@@ -38,6 +39,9 @@ namespace SpaceStationScramble {
                     break;
                 case EventSlot.West:
                     Position = westDrawLoc;
+                    break;
+                case EventSlot.Center:
+                    Position = centerDrawLoc;
                     break;
             }
         }
@@ -73,6 +77,7 @@ namespace SpaceStationScramble {
         North,
         South,
         East,
-        West
+        West,
+        Center
     };
 }

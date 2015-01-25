@@ -7,8 +7,6 @@ using System.Text;
 
 namespace SpaceStationScramble {
     abstract class DisasterEvent {
-        protected Texture2D texture;
-
         public PlayerNumber VisibleToPlayer {
             get;
             protected set;
@@ -28,9 +26,6 @@ namespace SpaceStationScramble {
             get;
             protected set;
         }
-
-        //Fields that will really belong to subclasses
-        private SteamColor steamColor;
 
         public DisasterEvent(long startTime, long endTime) {
             this.StartTime = startTime;
