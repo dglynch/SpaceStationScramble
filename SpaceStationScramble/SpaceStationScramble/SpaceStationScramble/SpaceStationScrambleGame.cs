@@ -1126,16 +1126,16 @@ namespace SpaceStationScramble {
                                 if (somethingVisible && repairDis.Slot == visibleSlot) {
                                     switch (repairDis.StationPart) {
                                         case StationPart.Hatch:
-                                            spriteBatch.Draw(hatchTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            spriteBatch.Draw(hatchTexture, currentDisplayLoc + new Vector2(8, 8), Color.Red);
                                             break;
                                         case StationPart.O2Tank:
-                                            spriteBatch.Draw(tankTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            spriteBatch.Draw(tankTexture, currentDisplayLoc + new Vector2(8, 8), Color.Blue);
                                             break;
                                         case StationPart.Pipe:
-                                            spriteBatch.Draw(pipeTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            spriteBatch.Draw(pipeTexture, currentDisplayLoc + new Vector2(8, 8), Color.Green);
                                             break;
                                         case StationPart.SatelliteDish:
-                                            spriteBatch.Draw(satelliteDishTexture, currentDisplayLoc + new Vector2(8, 8), Color.White);
+                                            spriteBatch.Draw(satelliteDishTexture, currentDisplayLoc + new Vector2(8, 8), Color.Yellow);
                                             break;
                                     }
                                 }
