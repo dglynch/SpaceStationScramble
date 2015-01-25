@@ -27,7 +27,7 @@ namespace SpaceStationScramble {
         SpriteBatch spriteBatch;
         Synchronizer synchronizer;
         string keyCode;
-        TimeSpan deathTime;
+        double deathTime;
 
         PlayerNumber currentPlayer;
         MenuItem currentMenuItem;
@@ -463,7 +463,7 @@ namespace SpaceStationScramble {
                         if (theEvent.EndTime <= elapsedRoundTime) {
                             eventsToRemove.Add(theEvent);
                             if (theEvent.VisibleToPlayer != currentPlayer) {
-                                deathTime = gameTime.TotalGameTime;
+                                deathTime = elapsedRoundTime;
                                 groanAndExplosion.Play();
                                 stopDisasterSounds();
                                 context = ScreenContext.DEATH;
@@ -1193,9 +1193,10 @@ namespace SpaceStationScramble {
                     }
                     break;
                 case ScreenContext.DEATH:
+                    TimeSpan deathTimeSpan = new TimeSpan(0, 0, 0, 0, (int)deathTime);
                     Vector2 measureString = font.MeasureString("GAME OVER");
                     spriteBatch.DrawString(font, "GAME OVER", new Vector2(640 - measureString.X / 2, 360 - measureString.Y / 2), Color.Red);
-                    spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", deathTime.Minutes, deathTime.Seconds), new Vector2(10, 10), Color.White);
+                    spriteBatch.DrawString(font, string.Format("Time: {0,2:00}:{1,2:00}", deathTimeSpan.Minutes, deathTimeSpan.Seconds), new Vector2(10, 10), Color.White);
                     break;
             }
 
