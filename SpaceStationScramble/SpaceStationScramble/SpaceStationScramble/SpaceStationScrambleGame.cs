@@ -189,32 +189,6 @@ namespace SpaceStationScramble {
             insideNodePositions.Add(SpaceStationSection.EAST, new Vector2(980, 360));
             insideNodePositions.Add(SpaceStationSection.WEST, new Vector2(300, 360));
 
-            //Hatches
-            repairableParts = new List<RepairPart>();
-            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.North, northHatchPos, hatchTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.South, southHatchPos, hatchTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.East, eastHatchPos, hatchTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.West, westHatchPos, hatchTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.Center, centerHatchPos, hatchTexture));
-            //Tanks
-            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.North, northTankPos, tankTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.South, southTankPos, tankTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.East, eastTankPos, tankTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.West, westTankPos, tankTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.Center, centerTankPos, tankTexture));
-            //Pipes
-            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.North, northPipePos, pipeTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.South, southPipePos, pipeTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.East, eastPipePos, pipeTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.West, westPipePos, pipeTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.Center, centerPipePos, pipeTexture));
-            //Satellite Dishes
-            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.North, northSatPos, satelliteDishTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.South, southSatPos, satelliteDishTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.East, eastSatPos, satelliteDishTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.West, westSatPos, satelliteDishTexture));
-            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.Center, centerSatPos, satelliteDishTexture));
-
             base.Initialize();
         }
 
@@ -285,6 +259,32 @@ namespace SpaceStationScramble {
             jetSound4 = Content.Load<SoundEffect>("sound/Jet Sound 10");
 
             alarmSound = Content.Load<SoundEffect>("sound/Alarm 1");
+
+            //Hatches
+            repairableParts = new List<RepairPart>();
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.North, northHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.South, southHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.East, eastHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.West, westHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.Center, centerHatchPos, hatchTexture));
+            //Tanks
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.North, northTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.South, southTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.East, eastTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.West, westTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.Center, centerTankPos, tankTexture));
+            //Pipes
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.North, northPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.South, southPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.East, eastPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.West, westPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.Center, centerPipePos, pipeTexture));
+            //Satellite Dishes
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.North, northSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.South, southSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.East, eastSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.West, westSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.Center, centerSatPos, satelliteDishTexture));
         }
 
         /// <summary>
@@ -1148,30 +1148,10 @@ namespace SpaceStationScramble {
                         spriteBatch.Draw(playerTwoBackground, Vector2.Zero, Color.White);
 
                         //Draw all the doodads on the outside of the ship
-                        spriteBatch.Draw(hatchTexture, northHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(hatchTexture, southHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(hatchTexture, eastHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(hatchTexture, westHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(hatchTexture, centerHatchPos - new Vector2(hatchTexture.Width / 2, hatchTexture.Height / 2), Color.White);
 
-                        spriteBatch.Draw(tankTexture, northTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(tankTexture, southTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(tankTexture, eastTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(tankTexture, westTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(tankTexture, centerTankPos - new Vector2(tankTexture.Width / 2, tankTexture.Height / 2), Color.White);
-
-                        spriteBatch.Draw(pipeTexture, northPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(pipeTexture, southPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(pipeTexture, eastPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(pipeTexture, westPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(pipeTexture, centerPipePos - new Vector2(pipeTexture.Width / 2, pipeTexture.Height / 2), Color.White);
-
-
-                        spriteBatch.Draw(satelliteDishTexture, northSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(satelliteDishTexture, southSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(satelliteDishTexture, eastSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(satelliteDishTexture, westSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
-                        spriteBatch.Draw(satelliteDishTexture, centerSatPos - new Vector2(satelliteDishTexture.Width / 2, satelliteDishTexture.Height / 2), Color.White);
+                        foreach (RepairPart part in repairableParts) {
+                            spriteBatch.Draw(part.Texture, part.Position - new Vector2(part.Texture.Width / 2, part.Texture.Height / 2), part.TintColor);
+                        }
 
                         //Draw the player
                         spriteBatch.Draw(playerTwoSprite, playerTwoPosition, Color.White);
