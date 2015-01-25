@@ -351,6 +351,7 @@ namespace SpaceStationScramble {
                     }
                     if (isNewlyPressedBack()) {
                         context = ScreenContext.TITLE_SCREEN_MENU;
+                        stopDisasterSounds();
                     }
                     break;
                 case ScreenContext.KEY_CODE:
@@ -427,6 +428,7 @@ namespace SpaceStationScramble {
                             if (theEvent.VisibleToPlayer != currentPlayer) {
                                 deathTime = gameTime.TotalGameTime;
                                 groanAndExplosion.Play();
+                                stopDisasterSounds();
                                 context = ScreenContext.DEATH;
                             } else {
                                 disasterSounds[theEvent].Stop();
@@ -519,6 +521,14 @@ namespace SpaceStationScramble {
             }
 
             base.Update(gameTime);
+        }
+
+        private void stopDisasterSounds() {
+            foreach (var element in disasterSounds) {
+                if (element.Value != null) {
+                    element.Value.Stop();
+                }
+            }
         }
 
         private int jetSoundRotator = 0;
