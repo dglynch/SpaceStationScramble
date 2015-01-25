@@ -80,6 +80,11 @@ namespace SpaceStationScramble {
         private GasValve currentlyClosingValve;
         private double valveClosingEndTime;
 
+        SoundEffect valveTurn1;
+        SoundEffect valveTurn2;
+        SoundEffectInstance valve;
+        bool valveSwap;
+
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -143,6 +148,9 @@ namespace SpaceStationScramble {
             font = Content.Load<SpriteFont>("font/Segoe UI Mono");
 
             valvePanel = Content.Load<Texture2D>("gfx/valve-panel");
+
+            valveTurn1 = Content.Load<SoundEffect>("sound/Valve Turn 1");
+            valveTurn2 = Content.Load<SoundEffect>("sound/Valve Turn 2");
         }
 
         /// <summary>
@@ -379,12 +387,26 @@ namespace SpaceStationScramble {
             if (currentlyClosingValve != gasValve) {
                 currentlyClosingValve = gasValve;
                 valveClosingEndTime = elapsedRoundTime + 2000;
+                valve = getValveInstance();
+                valve.Play();
+            }
+        }
+
+        private SoundEffectInstance getValveInstance() {
+            valveSwap = !valveSwap;
+            if (valveSwap) {
+                return valveTurn1.CreateInstance();
+            } else {
+                return valveTurn2.CreateInstance();
             }
         }
 
         private void stopClosingValve() {
             currentlyClosingValve = GasValve.NONE;
             valveClosingEndTime = Double.MaxValue;
+            if (valve != null) {
+                valve.Stop();
+            }
         }
         private void finishClosingGasValve(GasValve gasValve) {
             currentlyClosingValve = GasValve.NONE;
