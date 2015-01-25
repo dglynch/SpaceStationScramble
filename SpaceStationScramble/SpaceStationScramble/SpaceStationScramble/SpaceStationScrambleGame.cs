@@ -109,6 +109,9 @@ namespace SpaceStationScramble {
         SoundEffect gasLeakSound2;
         SoundEffect gasLeakSound3;
 
+        SoundEffect selectorMove;
+        SoundEffect selectorClick;
+
         int currentMusic;
 
         private IDictionary<DisasterEvent, SoundEffectInstance> disasterSounds = new Dictionary<DisasterEvent, SoundEffectInstance>();
@@ -229,6 +232,9 @@ namespace SpaceStationScramble {
             gasLeakSound1 = Content.Load<SoundEffect>("sound/Pressure Burst and Leak 1");
             gasLeakSound2 = Content.Load<SoundEffect>("sound/Pressure Burst and Leak 2");
             gasLeakSound3 = Content.Load<SoundEffect>("sound/Pressure Burst and Leak 3");
+
+            selectorMove = Content.Load<SoundEffect>("sound/Start Screen Selector 1");
+            selectorClick = Content.Load<SoundEffect>("sound/Start Screen Selection 1");
         }
 
         /// <summary>
@@ -262,14 +268,17 @@ namespace SpaceStationScramble {
                     if (isNewlyPressedUp()) {
                         if (currentMenuItem != MenuItem.NEW_GAME) {
                             currentMenuItem--;
+                            selectorMove.Play();
                         }
                     }
                     if (isNewlyPressedDown()) {
                         if (currentMenuItem != MenuItem.EXIT) {
                             currentMenuItem++;
+                            selectorMove.Play();
                         }
                     }
                     if (isNewlyPressedStart()) {
+                        selectorClick.Play();
                         switch (currentMenuItem) {
                             case MenuItem.NEW_GAME:
                                 context = ScreenContext.CHARACTER_SELECTION;
@@ -304,10 +313,12 @@ namespace SpaceStationScramble {
                     if (isNewlyPressedUp()) {
                         if (currentPlayer == PlayerNumber.TWO) {
                             currentPlayer = PlayerNumber.ONE;
+                            selectorMove.Play();
                         }
                     } else if (isNewlyPressedDown()) {
                         if (currentPlayer == PlayerNumber.ONE) {
                             currentPlayer = PlayerNumber.TWO;
+                            selectorMove.Play();
                         }
                     }
                     if (isNewlyPressedStart()) {
@@ -317,6 +328,7 @@ namespace SpaceStationScramble {
                             keyCode = string.Empty;
                         }
                         context = ScreenContext.KEY_CODE;
+                        selectorClick.Play();
                     }
                     if (isNewlyPressedBack()) {
                         context = ScreenContext.TITLE_SCREEN_MENU;
