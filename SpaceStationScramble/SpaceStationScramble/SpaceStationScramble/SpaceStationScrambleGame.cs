@@ -88,6 +88,11 @@ namespace SpaceStationScramble {
         private GasValve currentlyClosingValve;
         private double valveClosingEndTime;
 
+        private bool repairing;
+        private double repairEndTime;
+        private EventSlot repairLocation;
+        private StationPart repairPart;
+
         SoundEffect valveTurn1;
         SoundEffect valveTurn2;
         SoundEffectInstance valve;
@@ -126,6 +131,7 @@ namespace SpaceStationScramble {
 
         private IDictionary<DisasterEvent, SoundEffectInstance> disasterSounds = new Dictionary<DisasterEvent, SoundEffectInstance>();
 
+
         private readonly Vector2 northSatPos = new Vector2(580, 50);
         private readonly Vector2 northTankPos = new Vector2(690, 50);
         private readonly Vector2 northPipePos = new Vector2(580, 145);
@@ -151,6 +157,7 @@ namespace SpaceStationScramble {
         private readonly Vector2 centerPipePos = new Vector2(690, 310);
         private readonly Vector2 centerHatchPos = new Vector2(690, 425);
 
+        private List<RepairPart> repairableParts;
         public SpaceStationScrambleGame() {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -181,6 +188,32 @@ namespace SpaceStationScramble {
             insideNodePositions.Add(SpaceStationSection.SOUTH, new Vector2(640, 660));
             insideNodePositions.Add(SpaceStationSection.EAST, new Vector2(980, 360));
             insideNodePositions.Add(SpaceStationSection.WEST, new Vector2(300, 360));
+
+            //Hatches
+            repairableParts = new List<RepairPart>();
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.North, northHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.South, southHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.East, eastHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.West, westHatchPos, hatchTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Hatch, EventSlot.Center, centerHatchPos, hatchTexture));
+            //Tanks
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.North, northTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.South, southTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.East, eastTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.West, westTankPos, tankTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.O2Tank, EventSlot.Center, centerTankPos, tankTexture));
+            //Pipes
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.North, northPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.South, southPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.East, eastPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.West, westPipePos, pipeTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.Pipe, EventSlot.Center, centerPipePos, pipeTexture));
+            //Satellite Dishes
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.North, northSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.South, southSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.East, eastSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.West, westSatPos, satelliteDishTexture));
+            repairableParts.Add(new RepairPart(false, StationPart.SatelliteDish, EventSlot.Center, centerSatPos, satelliteDishTexture));
 
             base.Initialize();
         }
@@ -495,6 +528,7 @@ namespace SpaceStationScramble {
                     } else {
                         bool wasPlayerTwoMoving = isPlayerTwoMoving;
                         isPlayerTwoMoving = false;
+
                         if (currentGamepadState.IsButtonDown(Buttons.DPadUp) || currentKeyboardState.IsKeyDown(Keys.Up) || currentKeyboardState.IsKeyDown(Keys.W)) {
                             playerTwoPosition.Y -= playerTwoMoveSpeed;
                             isPlayerTwoMoving = true;
@@ -519,6 +553,45 @@ namespace SpaceStationScramble {
                             jetSoundInstance.Play();
                         } else if (!isPlayerTwoMoving && wasPlayerTwoMoving) {
                             jetSoundInstance.Stop();
+                        }
+
+                        //See if we're in range of any repairable parts
+                        float repairRadius = 16.0f;
+                        foreach (RepairPart part in repairableParts) {
+                            if (Vector2.Distance(playerTwoPosition, part.Position) < repairRadius) {
+                                switch (part.Part) {
+                                    case StationPart.Hatch:
+                                        if (currentGamepadState.IsButtonDown(Buttons.B)) {
+                                            if (!part.Active) {
+                                                startRepair(part);
+                                            }
+                                        }
+                                        break;
+                                    case StationPart.O2Tank:
+                                        if (currentGamepadState.IsButtonDown(Buttons.X)) {
+                                            if (!part.Active) {
+                                                startRepair(part);
+                                            }
+                                        }
+                                        break;
+                                    case StationPart.Pipe:
+                                        if (currentGamepadState.IsButtonDown(Buttons.A)) {
+                                            if (!part.Active) {
+                                                startRepair(part);
+                                            }
+                                        }
+                                        break;
+                                    case StationPart.SatelliteDish:
+                                        if (currentGamepadState.IsButtonDown(Buttons.Y)) {
+                                            if (!part.Active) {
+                                                startRepair(part);
+                                            }
+                                        }
+                                        break;
+                                }
+                            } else {
+                                part.Active = false;
+                            }
                         }
                     }
                     break;
@@ -549,6 +622,11 @@ namespace SpaceStationScramble {
                 default:
                     return jetSound4.CreateInstance();
             }
+        }
+
+        private void startRepair(RepairPart part) {
+            part.Active = true;
+            repairEndTime = elapsedRoundTime + 2000;
         }
 
         private int gasLeakSoundRotator = 0;
@@ -983,7 +1061,7 @@ namespace SpaceStationScramble {
                         //Draw the player
                         spriteBatch.Draw(playerOneSprite, playerOnePosition, Color.White);
 
-                        foreach(DisasterEvent theEvent in disasterEvents) {
+                        foreach (DisasterEvent theEvent in disasterEvents) {
                             if (theEvent is RepairDisaster) {
                                 RepairDisaster repairDis = theEvent as RepairDisaster;
                                 if (somethingVisible && repairDis.Slot == visibleSlot) {
@@ -1075,47 +1153,11 @@ namespace SpaceStationScramble {
             float repairRadius = 16.0f;
             Vector2 repairIconOffset = new Vector2(-32, -32);
 
-            if (Vector2.Distance(playerTwoPosition, northHatchPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, northHatchPos + repairIconOffset, Color.Red);
-            } else if (Vector2.Distance(playerTwoPosition, southHatchPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, southHatchPos + repairIconOffset, Color.Red);
-            } else if (Vector2.Distance(playerTwoPosition, eastHatchPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, eastHatchPos + repairIconOffset, Color.Red);
-            } else if (Vector2.Distance(playerTwoPosition, westHatchPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, westHatchPos + repairIconOffset, Color.Red);
-            } else if (Vector2.Distance(playerTwoPosition, centerHatchPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, centerHatchPos + repairIconOffset, Color.Red);
-            } if (Vector2.Distance(playerTwoPosition, northTankPos) < repairRadius) { //Tanks
-                spriteBatch.Draw(circleTexture, northTankPos + repairIconOffset, Color.Blue);
-            } else if (Vector2.Distance(playerTwoPosition, southTankPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, southTankPos + repairIconOffset, Color.Blue);
-            } else if (Vector2.Distance(playerTwoPosition, eastTankPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, eastTankPos + repairIconOffset, Color.Blue);
-            } else if (Vector2.Distance(playerTwoPosition, westTankPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, westTankPos + repairIconOffset, Color.Blue);
-            } else if (Vector2.Distance(playerTwoPosition, centerTankPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, centerTankPos + repairIconOffset, Color.Blue);
-            } else if (Vector2.Distance(playerTwoPosition, northSatPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, northSatPos + repairIconOffset, Color.Yellow);
-            } else if (Vector2.Distance(playerTwoPosition, southSatPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, southSatPos + repairIconOffset, Color.Yellow);
-            } else if (Vector2.Distance(playerTwoPosition, eastSatPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, eastSatPos + repairIconOffset, Color.Yellow);
-            } else if (Vector2.Distance(playerTwoPosition, westSatPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, westSatPos + repairIconOffset, Color.Yellow);
-            } else if (Vector2.Distance(playerTwoPosition, centerSatPos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, centerSatPos + repairIconOffset, Color.Yellow);
-            } else if (Vector2.Distance(playerTwoPosition, northPipePos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, northPipePos + repairIconOffset, Color.Green);
-            } else if (Vector2.Distance(playerTwoPosition, southPipePos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, southPipePos + repairIconOffset, Color.Green);
-            } else if (Vector2.Distance(playerTwoPosition, eastPipePos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, eastPipePos + repairIconOffset, Color.Green);
-            } else if (Vector2.Distance(playerTwoPosition, westPipePos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, westPipePos + repairIconOffset, Color.Green);
-            } else if (Vector2.Distance(playerTwoPosition, centerPipePos) < repairRadius) {
-                spriteBatch.Draw(circleTexture, centerPipePos + repairIconOffset, Color.Green);
-            }
+            foreach (RepairPart part in repairableParts) {
+                if (Vector2.Distance(playerTwoPosition, part.Position) < repairRadius) {
+                    spriteBatch.Draw(circleTexture, part.Position + repairIconOffset, part.TintColor);
+                }
+            };
         }
 
         private bool isNewlyPressedUp() {
@@ -1205,5 +1247,57 @@ namespace SpaceStationScramble {
         YELLOW,
         GREEN,
         RED
+    }
+
+    public class RepairPart {
+
+        public RepairPart(bool active, StationPart part, EventSlot slot, Vector2 position, Texture2D texture) {
+            Active = active;
+            Part = part;
+            Slot = slot;
+            Position = position;
+            Texture = texture;
+
+            switch (part) {
+                case StationPart.Hatch:
+                    TintColor = Color.Red;
+                    break;
+                case StationPart.O2Tank:
+                    TintColor = Color.Blue;
+                    break;
+                case StationPart.Pipe:
+                    TintColor = Color.Green;
+                    break;
+                case StationPart.SatelliteDish:
+                    TintColor = Color.Yellow;
+                    break;
+            }
+        }
+
+        public bool Active {
+            get;
+            set;
+        }
+        public StationPart Part {
+            get;
+            set;
+        }
+        public EventSlot Slot {
+            get;
+            set;
+        }
+        public Vector2 Position {
+            get;
+            set;
+        }
+        public Texture2D Texture {
+            get;
+            set;
+        }
+
+        public Color TintColor {
+            get;
+            private set;
+        }
     }
 }
