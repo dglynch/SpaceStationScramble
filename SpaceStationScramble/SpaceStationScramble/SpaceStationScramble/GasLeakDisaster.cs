@@ -12,16 +12,16 @@ namespace SpaceStationScramble {
         private readonly Vector2 eastDrawLoc = new Vector2(980, 360);
         private readonly Vector2 westDrawLoc = new Vector2(300, 360);
 
-        private SteamColor steamColor;
+        public SteamColor SteamColor {
+            get;
+            private set;
+        }
 
-        public GasLeakDisaster(EventSlot slot, long startTime, long endTime) :
+        public GasLeakDisaster(EventSlot slot, long startTime, long endTime, SteamColor steamColor) :
             base(startTime, endTime) {
-            
-            //This is stuff set on a class by class basis
-            VisibleToPlayer = PlayerNumber.TWO;
 
-            //TODO: Random steam color set by generator so its synced
-            steamColor = SteamColor.Blue;
+            VisibleToPlayer = PlayerNumber.TWO;
+            SteamColor = steamColor;
 
             switch (slot) {
                 case EventSlot.North:
@@ -38,9 +38,8 @@ namespace SpaceStationScramble {
                     break;
             }
         }
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-            switch (steamColor) {
+        public override void Draw(SpriteBatch spriteBatch) {
+            switch (SteamColor) {
                 case SteamColor.Red:
                     spriteBatch.Draw(SpaceStationScrambleGame.steamTexture, Position, Color.Red);
                     break;
@@ -50,13 +49,17 @@ namespace SpaceStationScramble {
                 case SteamColor.Green:
                     spriteBatch.Draw(SpaceStationScrambleGame.steamTexture, Position, Color.Green);
                     break;
+                case SteamColor.Yellow:
+                    spriteBatch.Draw(SpaceStationScrambleGame.steamTexture, Position, Color.Yellow);
+                    break;
             }
         }
     }
     public enum SteamColor {
         Red,
         Green,
-        Blue
+        Blue,
+        Yellow
     };
 
     public enum EventSlot {

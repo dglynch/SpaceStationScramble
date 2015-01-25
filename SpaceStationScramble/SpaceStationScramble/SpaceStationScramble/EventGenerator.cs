@@ -38,7 +38,9 @@ namespace SpaceStationScramble {
             eventSlots[nextSlot] = nextEventTime + eventDuration;
 
             //Currently only creating gas leaks
-            return new GasLeakDisaster(nextSlot, nextEventTime, nextEventTime + eventDuration);
+            var steamColors = Enum.GetValues(typeof(SteamColor));
+            SteamColor steamColor = (SteamColor)(steamColors.GetValue(syncronizer.Next(0, steamColors.Length)));
+            return new GasLeakDisaster(nextSlot, nextEventTime, nextEventTime + eventDuration, steamColor);
         }
     }
 }
