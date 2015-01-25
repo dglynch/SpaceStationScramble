@@ -289,7 +289,9 @@ namespace SpaceStationScramble {
                 case ScreenContext.INSTRUCTIONS:
                 case ScreenContext.CREDITS:
                 case ScreenContext.DEATH:
-                    musicLoopInstance.Stop();
+                    if (musicLoopInstance != null) {
+                        musicLoopInstance.Stop();
+                    }
                     if (titleMusicInstance.Volume * 1.05f < 1) {
                         titleMusicInstance.Volume += 0.001f;
                         titleMusicInstance.Volume *= 1.05f;
